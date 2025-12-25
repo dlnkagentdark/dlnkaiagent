@@ -1,0 +1,18 @@
+[Desktop Entry]
+Name=dLNk IDE
+Comment=AI-Powered Development Environment
+GenericName=Text Editor
+Exec=/usr/share/dlnk-ide/dlnk-ide --unity-launch %F
+Icon=dlnk-ide
+Type=Application
+StartupNotify=false
+StartupWMClass=dLNk IDE
+Categories=Utility;TextEditor;Development;IDE;
+MimeType=text/plain;inode/directory;application/x-dlnk-ide-workspace;
+Actions=new-empty-window;
+Keywords=dlnk;ide;vscode;
+
+[Desktop Action new-empty-window]
+Name=New Empty Window
+Exec=/usr/share/dlnk-ide/dlnk-ide --new-window %F
+Icon=dlnk-ide

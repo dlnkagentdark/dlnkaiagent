@@ -1,0 +1,42 @@
+# dLNk AI Bridge - Requirements
+# ==============================
+
+# gRPC
+grpcio>=1.60.0
+grpcio-tools>=1.60.0
+protobuf>=4.25.0
+
+# HTTP/2 Client (for Antigravity)
+httpx[http2]>=0.26.0
+h2>=4.1.0
+
+# WebSocket
+websockets>=12.0
+
+# REST API
+fastapi>=0.109.0
+uvicorn[standard]>=0.27.0
+pydantic>=2.5.0
+
+# Encryption
+cryptography>=41.0.0
+
+# Async
+aiohttp>=3.9.0
+aiofiles>=23.2.0
+
+# Utilities
+python-dotenv>=1.0.0
+requests>=2.31.0
+
+# Fallback Providers
+google-generativeai>=0.3.0
+openai>=1.10.0
+groq>=0.4.0
+
+# Logging
+colorlog>=6.8.0
+
+# Testing (optional)
+pytest>=7.4.0
+pytest-asyncio>=0.23.0

@@ -1,0 +1,52 @@
+{
+  "timestamp": "2025-12-24T17:51:51.447504",
+  "tests": [
+    {
+      "name": "Extension VSIX File",
+      "passed": true,
+      "message": "Size: 46.79 KB"
+    },
+    {
+      "name": "Compiled extension.js",
+      "passed": true,
+      "message": "Exists"
+    },
+    {
+      "name": "Compiled aiClient.js",
+      "passed": true,
+      "message": "Exists"
+    },
+    {
+      "name": "Compiled chatPanel.js",
+      "passed": true,
+      "message": "Exists"
+    },
+    {
+      "name": "License Server Health",
+      "passed": true,
+      "message": "Status: healthy"
+    },
+    {
+      "name": "License API Info",
+      "passed": false,
+      "message": "HTTP 404"
+    },
+    {
+      "name": "AI Bridge REST Health",
+      "passed": true,
+      "message": "Status: healthy"
+    },
+    {
+      "name": "AI Bridge Providers",
+      "passed": true,
+      "message": "Available: ['openai']"
+    },
+    {
+      "name": "AI Bridge WebSocket",
+      "passed": false,
+      "message": "Connection closed"
+    }
+  ],
+  "passed": 7,
+  "failed": 2
+}

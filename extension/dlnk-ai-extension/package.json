@@ -1,0 +1,162 @@
+{
+  "name": "dlnk-ai",
+  "displayName": "dLNk AI",
+  "description": "AI-Powered Code Assistant for dLNk IDE",
+  "version": "1.0.0",
+  "publisher": "dlnk",
+  "icon": "media/icons/dlnk-icon.png",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dlnk/dlnk-ai-extension"
+  },
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Programming Languages",
+    "Machine Learning",
+    "Other"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "dlnk-ai.openChat",
+        "title": "dLNk AI: Open Chat",
+        "icon": "$(comment-discussion)"
+      },
+      {
+        "command": "dlnk-ai.explainCode",
+        "title": "dLNk AI: Explain Selected Code"
+      },
+      {
+        "command": "dlnk-ai.generateCode",
+        "title": "dLNk AI: Generate Code"
+      },
+      {
+        "command": "dlnk-ai.fixCode",
+        "title": "dLNk AI: Fix Selected Code"
+      },
+      {
+        "command": "dlnk-ai.clearHistory",
+        "title": "dLNk AI: Clear Chat History"
+      },
+      {
+        "command": "dlnk-ai.exportHistory",
+        "title": "dLNk AI: Export Chat History"
+      },
+      {
+        "command": "dlnk-ai.importHistory",
+        "title": "dLNk AI: Import Chat History"
+      }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "dlnk-ai",
+          "title": "dLNk AI",
+          "icon": "media/icons/dlnk-icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "dlnk-ai": [
+        {
+          "type": "webview",
+          "id": "dlnk-ai.chatView",
+          "name": "Chat"
+        }
+      ]
+    },
+    "menus": {
+      "editor/context": [
+        {
+          "command": "dlnk-ai.explainCode",
+          "when": "editorHasSelection",
+          "group": "dlnk-ai@1"
+        },
+        {
+          "command": "dlnk-ai.fixCode",
+          "when": "editorHasSelection",
+          "group": "dlnk-ai@2"
+        }
+      ]
+    },
+    "keybindings": [
+      {
+        "command": "dlnk-ai.openChat",
+        "key": "ctrl+shift+a",
+        "mac": "cmd+shift+a"
+      },
+      {
+        "command": "dlnk-ai.explainCode",
+        "key": "ctrl+shift+e",
+        "mac": "cmd+shift+e",
+        "when": "editorHasSelection"
+      }
+    ],
+    "configuration": {
+      "title": "dLNk AI",
+      "properties": {
+        "dlnk-ai.serverUrl": {
+          "type": "string",
+          "default": "ws://localhost:8765",
+          "description": "WebSocket server URL for AI Bridge"
+        },
+        "dlnk-ai.apiUrl": {
+          "type": "string",
+          "default": "http://localhost:8766/api",
+          "description": "REST API URL for AI Bridge"
+        },
+        "dlnk-ai.autoConnect": {
+          "type": "boolean",
+          "default": true,
+          "description": "Auto-connect to AI server on startup"
+        },
+        "dlnk-ai.streamResponse": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable streaming response (show text character by character)"
+        },
+        "dlnk-ai.maxReconnectAttempts": {
+          "type": "number",
+          "default": 5,
+          "description": "Maximum number of reconnection attempts"
+        },
+        "dlnk-ai.reconnectInterval": {
+          "type": "number",
+          "default": 5000,
+          "description": "Reconnection interval in milliseconds"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js",
+    "package": "vsce package"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.85.0",
+    "@types/node": "^20.0.0",
+    "@types/ws": "^8.5.10",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "eslint": "^8.0.0",
+    "typescript": "^5.3.0",
+    "@vscode/test-electron": "^2.3.0",
+    "@vscode/vsce": "^2.22.0"
+  },
+  "dependencies": {
+    "ws": "^8.14.0",
+    "marked": "^11.0.0",
+    "highlight.js": "^11.9.0"
+  }
+}

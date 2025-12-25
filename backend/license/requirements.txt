@@ -1,0 +1,28 @@
+# dLNk License System Requirements
+
+# Web Framework
+fastapi>=0.100.0
+uvicorn[standard]>=0.23.0
+
+# Encryption
+cryptography>=41.0.0
+
+# HTTP Client (for registration)
+aiohttp>=3.8.0
+
+# 2FA Support
+pyotp>=2.8.0
+qrcode[pil]>=7.4.0
+
+# Data Validation
+pydantic>=2.0.0
+pydantic[email]>=2.0.0
+
+# Database (SQLite is built-in)
+# No additional package needed
+
+# Utilities
+python-multipart>=0.0.6
+
+# Optional: For production
+# gunicorn>=21.0.0

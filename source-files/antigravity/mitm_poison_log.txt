@@ -1,0 +1,13 @@
+[*] Starting HTTPS MITM Proxy on port 8081...
+
+[MITM] CONNECT request to www.google.com:443
+[+] Decrypted Request:
+POST / HTTP/1.1
+Host: www.google.com
+User-Agent: python-requests/2.31.0
+Accept-Encoding: gzip, deflate, br, zstd
+Accept: */*
+Connection: keep-alive
+Content-Type: application/json
+Authorization:...
+[*] Forwarding Inner POST to https://www.google.com:443/

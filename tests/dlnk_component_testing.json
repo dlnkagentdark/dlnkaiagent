@@ -1,0 +1,92 @@
+{
+  "results": [
+    {
+      "input": "vscode-fork",
+      "output": {
+        "component_name": "vscode-fork",
+        "status": "PASS",
+        "file_count": 58,
+        "issues_found": "None",
+        "recommendations": "None"
+      },
+      "error": ""
+    },
+    {
+      "input": "extension",
+      "output": {
+        "component_name": "extension",
+        "status": "WARNING",
+        "file_count": 48,
+        "issues_found": "1. The 'out' directory containing the compiled JavaScript was missing initially.\n2. The linter reported 7 errors (unused variables) and 14 warnings (missing curly braces).\n3. `pnpm install` reported 5 deprecated subdependencies.",
+        "recommendations": "1. Fix the linting errors and warnings to improve code quality.\n2. Update the deprecated dependencies.\n3. Include the compiled 'out' directory in the repository or provide clear build instructions."
+      },
+      "error": ""
+    },
+    {
+      "input": "backend/ai-bridge",
+      "output": {
+        "component_name": "backend/ai-bridge",
+        "status": "PASS",
+        "file_count": 50,
+        "issues_found": "None",
+        "recommendations": "None"
+      },
+      "error": ""
+    },
+    {
+      "input": "backend/license",
+      "output": {
+        "component_name": "backend/license",
+        "status": "PASS",
+        "file_count": 47,
+        "issues_found": "None",
+        "recommendations": "None"
+      },
+      "error": ""
+    },
+    {
+      "input": "admin-console",
+      "output": {
+        "component_name": "admin-console",
+        "status": "PASS",
+        "file_count": 67,
+        "issues_found": "None",
+        "recommendations": "None"
+      },
+      "error": ""
+    },
+    {
+      "input": "security",
+      "output": {
+        "component_name": "security",
+        "status": "PASS",
+        "file_count": 66,
+        "issues_found": "None",
+        "recommendations": "None"
+      },
+      "error": ""
+    },
+    {
+      "input": "telegram-bot",
+      "output": {
+        "component_name": "telegram-bot",
+        "status": "PASS",
+        "file_count": 46,
+        "issues_found": "None",
+        "recommendations": "โครงสร้างไฟล์โดยรวมดี แต่มีไฟล์ Markdown จำนวนมากใน root directory (`AI-09_*.md`) ซึ่งทำให้ดูไม่เป็นระเบียบ ควรย้ายไฟล์เหล่านี้ไปไว้ในโฟลเดอร์ย่อย เช่น `docs/reports` เพื่อให้ root directory สะอาดขึ้น"
+      },
+      "error": ""
+    },
+    {
+      "input": "docs",
+      "output": {
+        "component_name": "docs",
+        "status": "WARNING",
+        "file_count": 26,
+        "issues_found": "ลิงก์ในไฟล์ README.md ไม่ถูกต้อง ทำให้ไม่สามารถเข้าถึงเอกสาร API, Changelog, และ Test Plan ได้",
+        "recommendations": "แก้ไขลิงก์ในไฟล์ README.md ให้ถูกต้อง และตรวจสอบว่าไฟล์เอกสารที่เกี่ยวข้องมีอยู่จริงในโปรเจค"
+      },
+      "error": ""
+    }
+  ]
+}

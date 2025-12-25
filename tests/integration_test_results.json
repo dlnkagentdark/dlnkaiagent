@@ -1,0 +1,128 @@
+{
+  "total": 24,
+  "passed": 24,
+  "failed": 0,
+  "errors": [],
+  "details": [
+    {
+      "name": "License Config",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "License Generation",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "License Validator",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "Hardware ID",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "License Storage",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "Login Manager",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "TOTP Manager",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "Session Manager",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "AI Bridge Config",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "Token Manager",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "Antigravity Client",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "Proto Encoder",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "Provider Manager",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "WebSocket Server",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "REST Server",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "Prompt Filter",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "Prompt Filter - Safe Prompt",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "Activity Logger",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "Anomaly Detector",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "Rate Limiter",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "Alert Manager",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "License Encryption",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "Security Token Encryption",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "License Test Suite (50 tests)",
+      "passed": true,
+      "message": ""
+    }
+  ]
+}

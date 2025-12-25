@@ -1,0 +1,13 @@
+Subject,Component Name,Status,File Count,Issues Found,Recommendations,Error
+vscode-fork,vscode-fork,PASS,58,None,None,
+extension,extension,WARNING,48,"1. The 'out' directory containing the compiled JavaScript was missing initially.
+2. The linter reported 7 errors (unused variables) and 14 warnings (missing curly braces).
+3. `pnpm install` reported 5 deprecated subdependencies.","1. Fix the linting errors and warnings to improve code quality.
+2. Update the deprecated dependencies.
+3. Include the compiled 'out' directory in the repository or provide clear build instructions.",
+backend/ai-bridge,backend/ai-bridge,PASS,50,None,None,
+backend/license,backend/license,PASS,47,None,None,
+admin-console,admin-console,PASS,67,None,None,
+security,security,PASS,66,None,None,
+telegram-bot,telegram-bot,PASS,46,None,โครงสร้างไฟล์โดยรวมดี แต่มีไฟล์ Markdown จำนวนมากใน root directory (`AI-09_*.md`) ซึ่งทำให้ดูไม่เป็นระเบียบ ควรย้ายไฟล์เหล่านี้ไปไว้ในโฟลเดอร์ย่อย เช่น `docs/reports` เพื่อให้ root directory สะอาดขึ้น,
+docs,docs,WARNING,26,"ลิงก์ในไฟล์ README.md ไม่ถูกต้อง ทำให้ไม่สามารถเข้าถึงเอกสาร API, Changelog, และ Test Plan ได้",แก้ไขลิงก์ในไฟล์ README.md ให้ถูกต้อง และตรวจสอบว่าไฟล์เอกสารที่เกี่ยวข้องมีอยู่จริงในโปรเจค,

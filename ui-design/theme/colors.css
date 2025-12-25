@@ -1,0 +1,227 @@
+/**
+ * dLNk IDE - Official Color System
+ * AI-04 UI/UX Designer
+ * Version: 1.0.0
+ * 
+ * This file contains all official colors for the dLNk IDE project.
+ * Use these CSS variables consistently across all UI components.
+ */
+
+:root {
+    /* ========================================
+       PRIMARY COLORS
+       Main background colors for the interface
+       ======================================== */
+    
+    --dlnk-bg-primary: #1a1a2e;      /* Main background - Dark Blue-Black */
+    --dlnk-bg-secondary: #16213e;    /* Secondary background - Darker Blue */
+    --dlnk-bg-tertiary: #0f3460;     /* Tertiary background - Deep Blue */
+    
+    /* RGB versions for opacity manipulation */
+    --dlnk-bg-primary-rgb: 26, 26, 46;
+    --dlnk-bg-secondary-rgb: 22, 33, 62;
+    --dlnk-bg-tertiary-rgb: 15, 52, 96;
+    
+    
+    /* ========================================
+       ACCENT COLORS
+       Interactive and highlight colors
+       ======================================== */
+    
+    --dlnk-accent-primary: #e94560;   /* Primary accent - Red-Pink */
+    --dlnk-accent-secondary: #533483; /* Secondary accent - Purple */
+    --dlnk-accent-success: #00d9ff;   /* Success state - Cyan */
+    --dlnk-accent-warning: #ffc107;   /* Warning state - Yellow */
+    --dlnk-accent-error: #ff4757;     /* Error state - Red */
+    
+    /* Hover variants */
+    --dlnk-accent-primary-hover: #c73e54;
+    --dlnk-accent-secondary-hover: #442a6e;
+    --dlnk-accent-success-hover: #00b8d9;
+    --dlnk-accent-warning-hover: #e6ac00;
+    --dlnk-accent-error-hover: #e63946;
+    
+    /* RGB versions */
+    --dlnk-accent-primary-rgb: 233, 69, 96;
+    --dlnk-accent-secondary-rgb: 83, 52, 131;
+    --dlnk-accent-success-rgb: 0, 217, 255;
+    --dlnk-accent-warning-rgb: 255, 193, 7;
+    --dlnk-accent-error-rgb: 255, 71, 87;
+    
+    
+    /* ========================================
+       TEXT COLORS
+       Typography color system
+       ======================================== */
+    
+    --dlnk-text-primary: #ffffff;     /* Primary text - White */
+    --dlnk-text-secondary: #a0a0a0;   /* Secondary text - Gray */
+    --dlnk-text-muted: #6c757d;       /* Muted text - Dark Gray */
+    --dlnk-text-link: #00d9ff;        /* Link text - Cyan */
+    --dlnk-text-inverse: #1a1a2e;     /* Inverse text - Dark */
+    
+    
+    /* ========================================
+       BORDER & SHADOW
+       Structural elements
+       ======================================== */
+    
+    --dlnk-border-color: #2d2d44;
+    --dlnk-border-light: #3d3d54;
+    --dlnk-border-dark: #1d1d34;
+    
+    --dlnk-shadow-color: rgba(0, 0, 0, 0.3);
+    --dlnk-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.2);
+    --dlnk-shadow-md: 0 4px 6px rgba(0, 0, 0, 0.25);
+    --dlnk-shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.3);
+    --dlnk-shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.35);
+    
+    
+    /* ========================================
+       GRADIENTS
+       Brand gradients
+       ======================================== */
+    
+    --dlnk-gradient-primary: linear-gradient(135deg, #e94560, #533483);
+    --dlnk-gradient-secondary: linear-gradient(135deg, #0f3460, #16213e);
+    --dlnk-gradient-accent: linear-gradient(135deg, #00d9ff, #533483);
+    --dlnk-gradient-dark: linear-gradient(180deg, #1a1a2e, #16213e);
+    
+    
+    /* ========================================
+       SEMANTIC COLORS
+       Status and feedback colors
+       ======================================== */
+    
+    --dlnk-status-online: #00d9ff;
+    --dlnk-status-offline: #6c757d;
+    --dlnk-status-busy: #ffc107;
+    --dlnk-status-error: #ff4757;
+    
+    --dlnk-feedback-info: #00d9ff;
+    --dlnk-feedback-success: #00d9ff;
+    --dlnk-feedback-warning: #ffc107;
+    --dlnk-feedback-error: #ff4757;
+    
+    
+    /* ========================================
+       CODE SYNTAX COLORS
+       For code highlighting
+       ======================================== */
+    
+    --dlnk-code-keyword: #e94560;
+    --dlnk-code-string: #98c379;
+    --dlnk-code-number: #d19a66;
+    --dlnk-code-function: #00d9ff;
+    --dlnk-code-class: #ffc107;
+    --dlnk-code-comment: #6c757d;
+    --dlnk-code-variable: #ffffff;
+    --dlnk-code-operator: #e94560;
+    --dlnk-code-property: #00d9ff;
+    --dlnk-code-tag: #e94560;
+    --dlnk-code-attribute: #ffc107;
+    
+    
+    /* ========================================
+       SPACING SYSTEM
+       Consistent spacing values
+       ======================================== */
+    
+    --dlnk-space-xs: 4px;
+    --dlnk-space-sm: 8px;
+    --dlnk-space-md: 16px;
+    --dlnk-space-lg: 24px;
+    --dlnk-space-xl: 32px;
+    --dlnk-space-2xl: 48px;
+    --dlnk-space-3xl: 64px;
+    
+    
+    /* ========================================
+       BORDER RADIUS
+       Rounded corner values
+       ======================================== */
+    
+    --dlnk-radius-sm: 4px;
+    --dlnk-radius-md: 8px;
+    --dlnk-radius-lg: 12px;
+    --dlnk-radius-xl: 16px;
+    --dlnk-radius-2xl: 24px;
+    --dlnk-radius-full: 9999px;
+    
+    
+    /* ========================================
+       TYPOGRAPHY
+       Font settings
+       ======================================== */
+    
+    --dlnk-font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --dlnk-font-mono: 'Fira Code', 'Consolas', 'Monaco', monospace;
+    
+    --dlnk-font-size-xs: 11px;
+    --dlnk-font-size-sm: 13px;
+    --dlnk-font-size-md: 14px;
+    --dlnk-font-size-lg: 16px;
+    --dlnk-font-size-xl: 18px;
+    --dlnk-font-size-2xl: 24px;
+    --dlnk-font-size-3xl: 32px;
+    --dlnk-font-size-4xl: 48px;
+    
+    --dlnk-line-height-tight: 1.25;
+    --dlnk-line-height-normal: 1.5;
+    --dlnk-line-height-relaxed: 1.75;
+    
+    
+    /* ========================================
+       TRANSITIONS
+       Animation timing
+       ======================================== */
+    
+    --dlnk-transition-fast: 0.15s ease;
+    --dlnk-transition-normal: 0.25s ease;
+    --dlnk-transition-slow: 0.4s ease;
+    --dlnk-transition-bounce: 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    
+    
+    /* ========================================
+       Z-INDEX LAYERS
+       Stacking order
+       ======================================== */
+    
+    --dlnk-z-dropdown: 100;
+    --dlnk-z-sticky: 200;
+    --dlnk-z-fixed: 300;
+    --dlnk-z-modal-backdrop: 400;
+    --dlnk-z-modal: 500;
+    --dlnk-z-popover: 600;
+    --dlnk-z-tooltip: 700;
+}
+
+/* ========================================
+   UTILITY CLASSES
+   Quick-use color classes
+   ======================================== */
+
+/* Background Colors */
+.bg-primary { background-color: var(--dlnk-bg-primary); }
+.bg-secondary { background-color: var(--dlnk-bg-secondary); }
+.bg-tertiary { background-color: var(--dlnk-bg-tertiary); }
+.bg-accent { background-color: var(--dlnk-accent-primary); }
+
+/* Text Colors */
+.text-primary { color: var(--dlnk-text-primary); }
+.text-secondary { color: var(--dlnk-text-secondary); }
+.text-muted { color: var(--dlnk-text-muted); }
+.text-link { color: var(--dlnk-text-link); }
+.text-accent { color: var(--dlnk-accent-primary); }
+.text-success { color: var(--dlnk-accent-success); }
+.text-warning { color: var(--dlnk-accent-warning); }
+.text-error { color: var(--dlnk-accent-error); }
+
+/* Border Colors */
+.border-default { border-color: var(--dlnk-border-color); }
+.border-accent { border-color: var(--dlnk-accent-primary); }
+
+/* Gradient Backgrounds */
+.gradient-primary { background: var(--dlnk-gradient-primary); }
+.gradient-secondary { background: var(--dlnk-gradient-secondary); }
+.gradient-accent { background: var(--dlnk-gradient-accent); }
