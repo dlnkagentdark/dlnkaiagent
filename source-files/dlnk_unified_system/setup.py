@@ -79,7 +79,7 @@ def configure_system():
             "license_server": "http://127.0.0.1:5000",
             "telegram_link": "https://t.me/dlnkai",
             "auto_refresh": True,
-            "default_provider": "antigravity"
+            "default_provider": "dlnk_ai"
         }
         with open(config_file, 'w') as f:
             json.dump(config, f, indent=2)

@@ -490,7 +490,7 @@ class DLNKQAAudit:
         if filter_path.exists():
             content = filter_path.read_text()
             
-            keywords = ["dlnk", "antigravity", "jetski", "admin", "license", "telegram"]
+            keywords = ["dlnk", "dlnk_ai", "jetski", "admin", "license", "telegram"]
             found_keywords = sum(1 for kw in keywords if kw in content.lower())
             
             score = (found_keywords / len(keywords)) * 100

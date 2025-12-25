@@ -482,7 +482,7 @@ class DLNKLauncher(ctk.CTk):
         # Try dLNk IDE first
         dlnk_paths = [
             os.path.join(os.path.dirname(os.path.realpath(__file__)), "dlnk-ide.exe"),
-            os.path.join(os.path.dirname(os.path.realpath(__file__)), "Antigravity.exe"),
+            os.path.join(os.path.dirname(os.path.realpath(__file__)), "dLNk AI.exe"),
             os.path.join(os.path.dirname(os.path.realpath(__file__)), "bin", "dlnk-ide"),
         ]
         
@@ -496,9 +496,9 @@ class DLNKLauncher(ctk.CTk):
                     
         # Fallback to VS Code with proxy
         vscode_paths = [
-            os.path.expandvars(r"%LOCALAPPDATA%\Programs\Microsoft VS Code\Code.exe"),
-            r"C:\Program Files\Microsoft VS Code\Code.exe",
-            r"C:\Program Files (x86)\Microsoft VS Code\Code.exe",
+            os.path.expandvars(r"%LOCALAPPDATA%\Programs\dLNk IDE\Code.exe"),
+            r"C:\Program Files\dLNk IDE\Code.exe",
+            r"C:\Program Files (x86)\dLNk IDE\Code.exe",
             "/usr/bin/code",
             "/usr/local/bin/code"
         ]

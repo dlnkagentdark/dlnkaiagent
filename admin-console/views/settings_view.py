@@ -262,12 +262,12 @@ class SettingsView(ctk.CTkFrame):
             "http://localhost:5001"
         )
         
-        # Antigravity URL
+        # dLNk AI API URL
         self._create_input_row(
             content,
-            "Antigravity API URL",
-            "api_antigravity_url",
-            "https://api.antigravity.ai"
+            "dLNk AI API URL",
+            "api_dlnk_ai_url",
+            "https://api.dlnk.dev"
         )
         
         # Request Timeout
@@ -352,7 +352,7 @@ class SettingsView(ctk.CTkFrame):
             'max_requests_hour': '500',
             'suspicious_threshold': '0.7',
             'api_backend_url': 'http://localhost:5001',
-            'api_antigravity_url': 'https://api.antigravity.ai',
+            'api_dlnk_ai_url': 'https://api.dlnk.dev',
             'api_timeout': '30',
             'session_lifetime': '24',
             'max_login_attempts': '5',

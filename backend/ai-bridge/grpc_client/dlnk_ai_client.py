@@ -1,9 +1,9 @@
 """
-dLNk AI Bridge - Antigravity gRPC Client
+dLNk AI Bridge - dLNk AI gRPC Client
 ========================================
-gRPC Client for Antigravity/Jetski API with streaming support.
+gRPC Client for dLNk AI/Jetski API with streaming support.
 
-Based on: /source-files/dlnk_core/dlnk_antigravity_bridge.py
+Based on: /source-files/dlnk_core/dlnk_dlnk_ai_bridge.py
 
 Author: dLNk Team (AI-05)
 Version: 1.0.0
@@ -18,7 +18,7 @@ from dataclasses import dataclass, field
 
 from .proto_encoder import ProtoEncoder, ProtoDecoder
 
-logger = logging.getLogger('AntigravityClient')
+logger = logging.getLogger('DLNKAIClient')
 
 
 @dataclass
@@ -41,7 +41,7 @@ class ChatResponse:
     """Represents a chat response"""
     content: str
     finish_reason: str = 'stop'
-    provider: str = 'antigravity'
+    provider: str = 'dlnk_ai'
     model: str = 'default'
     usage: Dict[str, int] = field(default_factory=dict)
     elapsed_ms: int = 0
@@ -57,9 +57,9 @@ class ChatResponse:
         }
 
 
-class AntigravityClient:
+class DLNKAIClient:
     """
-    gRPC Client for Antigravity/Jetski API
+    gRPC Client for dLNk AI/Jetski API
     
     Features:
     - HTTP/2 with binary protobuf encoding
@@ -69,14 +69,14 @@ class AntigravityClient:
     - Request/response statistics
     
     Usage:
-        client = AntigravityClient(token_manager=token_mgr)
+        client = DLNKAIClient(token_manager=token_mgr)
         await client.connect()
         response = await client.chat("Hello!")
         await client.disconnect()
     """
     
     # Default endpoint
-    DEFAULT_ENDPOINT = "https://antigravity-worker.google.com/exa.language_server_pb.LanguageServerService/SendUserCascadeMessage"
+    DEFAULT_ENDPOINT = "https://dlnk_ai-worker.google.com/exa.language_server_pb.LanguageServerService/SendUserCascadeMessage"
     
     def __init__(
         self,
@@ -87,7 +87,7 @@ class AntigravityClient:
         max_retries: int = 3
     ):
         """
-        Initialize Antigravity client
+        Initialize dLNk AI client
         
         Args:
             endpoint: gRPC endpoint URL
@@ -135,7 +135,7 @@ class AntigravityClient:
             )
             
             self._connected = True
-            logger.info(f"Connected to Antigravity endpoint: {self.endpoint}")
+            logger.info(f"Connected to dLNk AI endpoint: {self.endpoint}")
             
             if self._on_connect:
                 await self._on_connect()
@@ -143,7 +143,7 @@ class AntigravityClient:
             return True
             
         except Exception as e:
-            logger.error(f"Failed to connect to Antigravity: {e}")
+            logger.error(f"Failed to connect to dLNk AI: {e}")
             self._connected = False
             
             if self._on_error:
@@ -158,7 +158,7 @@ class AntigravityClient:
             self._http_client = None
         
         self._connected = False
-        logger.info("Disconnected from Antigravity")
+        logger.info("Disconnected from dLNk AI")
         
         if self._on_disconnect:
             await self._on_disconnect()
@@ -187,8 +187,8 @@ class AntigravityClient:
             message: User message
             conversation_id: Optional conversation ID for context
             system_prompt: Optional system prompt
-            temperature: Sampling temperature (not used in Antigravity)
-            max_tokens: Maximum response tokens (not used in Antigravity)
+            temperature: Sampling temperature (not used in dLNk AI)
+            max_tokens: Maximum response tokens (not used in dLNk AI)
         
         Returns:
             ChatResponse with AI response
@@ -227,7 +227,7 @@ class AntigravityClient:
         headers = {
             "Content-Type": "application/grpc",
             "TE": "trailers",
-            "User-Agent": "dLNk-IDE/1.0.0 (compatible; Antigravity)",
+            "User-Agent": "dLNk-IDE/1.0.0 (compatible; dLNk AI)",
             "Authorization": f"Bearer {access_token}"
         }
         
@@ -257,7 +257,7 @@ class AntigravityClient:
                         return ChatResponse(
                             content=response_text,
                             finish_reason='stop',
-                            provider='antigravity',
+                            provider='dlnk_ai',
                             elapsed_ms=elapsed_ms
                         )
                     else:
@@ -265,13 +265,13 @@ class AntigravityClient:
                         return ChatResponse(
                             content="",
                             finish_reason='empty',
-                            provider='antigravity',
+                            provider='dlnk_ai',
                             elapsed_ms=elapsed_ms
                         )
                 else:
                     self.error_count += 1
                     last_error = f"HTTP {response.status_code}: {response.text[:200]}"
-                    logger.warning(f"Antigravity request failed (attempt {attempt + 1}): {last_error}")
+                    logger.warning(f"dLNk AI request failed (attempt {attempt + 1}): {last_error}")
                     
                     # Don't retry on auth errors
                     if response.status_code in (401, 403):
@@ -282,14 +282,14 @@ class AntigravityClient:
             except Exception as e:
                 self.error_count += 1
                 last_error = str(e)
-                logger.warning(f"Antigravity request exception (attempt {attempt + 1}): {e}")
+                logger.warning(f"dLNk AI request exception (attempt {attempt + 1}): {e}")
                 
                 if self._on_error:
                     await self._on_error(e)
                 
                 await asyncio.sleep(1 * (attempt + 1))
         
-        raise RuntimeError(f"Antigravity request failed after {self.max_retries} attempts: {last_error}")
+        raise RuntimeError(f"dLNk AI request failed after {self.max_retries} attempts: {last_error}")
     
     async def chat_stream(
         self,
@@ -333,7 +333,7 @@ class AntigravityClient:
         headers = {
             "Content-Type": "application/grpc",
             "TE": "trailers",
-            "User-Agent": "dLNk-IDE/1.0.0 (compatible; Antigravity)",
+            "User-Agent": "dLNk-IDE/1.0.0 (compatible; dLNk AI)",
             "Authorization": f"Bearer {access_token}"
         }
         

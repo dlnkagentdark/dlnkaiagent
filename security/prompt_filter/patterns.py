@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Blocked Prompt Patterns
-ป้องกันการโจมตี dLNk, Antigravity, Jetski
+ป้องกันการโจมตี dLNk, dLNk AI, Jetski
 """
 
 from typing import Dict, List
@@ -17,11 +17,11 @@ BLOCKED_PATTERNS: List[str] = [
     r"(?i)exploit\s*dlnk",
     r"(?i)reverse\s*engineer\s*dlnk",
     
-    # === Attacks on Antigravity ===
-    r"(?i)hack\s*antigravity",
-    r"(?i)bypass\s*antigravity",
-    r"(?i)crack\s*antigravity",
-    r"(?i)exploit\s*antigravity",
+    # === Attacks on dLNk AI ===
+    r"(?i)hack\s*dlnk_ai",
+    r"(?i)bypass\s*dlnk_ai",
+    r"(?i)crack\s*dlnk_ai",
+    r"(?i)exploit\s*dlnk_ai",
     
     # === Attacks on Jetski ===
     r"(?i)hack\s*jetski",
@@ -30,18 +30,18 @@ BLOCKED_PATTERNS: List[str] = [
     r"(?i)exploit\s*jetski",
     
     # === API Key/Token theft ===
-    r"(?:jetski|dlnk|antigravity).*(?:api|key|token|secret)",
-    r"(?:api|key|token|secret).*(?:jetski|dlnk|antigravity)",
+    r"(?:jetski|dlnk|dlnk_ai).*(?:api|key|token|secret)",
+    r"(?:api|key|token|secret).*(?:jetski|dlnk|dlnk_ai)",
     r"(?:steal|extract|dump|leak).*(?:jetski|dlnk)",
     
     # === Admin attacks ===
-    r"(?:admin|administrator).*(?:password|credential|login).*(?:dlnk|antigravity)",
-    r"(?:dlnk|antigravity).*(?:admin|administrator).*(?:password|credential)",
-    r"(?:bypass|crack|hack).*(?:dlnk|antigravity).*(?:admin|license)",
+    r"(?:admin|administrator).*(?:password|credential|login).*(?:dlnk|dlnk_ai)",
+    r"(?:dlnk|dlnk_ai).*(?:admin|administrator).*(?:password|credential)",
+    r"(?:bypass|crack|hack).*(?:dlnk|dlnk_ai).*(?:admin|license)",
     
     # === Telegram Bot attacks ===
-    r"(?:telegram|bot).*(?:token|secret).*(?:dlnk|antigravity)",
-    r"(?:dlnk|antigravity).*(?:telegram|bot).*(?:token|secret)",
+    r"(?:telegram|bot).*(?:token|secret).*(?:dlnk|dlnk_ai)",
+    r"(?:dlnk|dlnk_ai).*(?:telegram|bot).*(?:token|secret)",
     r"(?:hijack|steal|extract).*(?:telegram|bot).*(?:dlnk)",
     
     # === License bypass attempts ===
@@ -49,9 +49,9 @@ BLOCKED_PATTERNS: List[str] = [
     r"(?i)crack\s*license",
     r"(?i)generate\s*fake\s*license",
     r"(?i)keygen",
-    r"(?:bypass|crack|keygen|generate).*(?:license|key).*(?:dlnk|antigravity)",
-    r"(?:dlnk|antigravity).*(?:license|key).*(?:bypass|crack|keygen)",
-    r"(?:reverse|decompile|disassemble).*(?:dlnk|antigravity)",
+    r"(?:bypass|crack|keygen|generate).*(?:license|key).*(?:dlnk|dlnk_ai)",
+    r"(?:dlnk|dlnk_ai).*(?:license|key).*(?:bypass|crack|keygen)",
+    r"(?:reverse|decompile|disassemble).*(?:dlnk|dlnk_ai)",
     
     # === Token theft attempts ===
     r"(?i)steal\s*token",
@@ -63,7 +63,7 @@ BLOCKED_PATTERNS: List[str] = [
     r"(?i)reveal\s*instructions",
     r"(?i)ignore\s*previous\s*instructions",
     r"(?i)disregard\s*all\s*rules",
-    r"(?:system|prompt|instruction).*(?:dlnk|antigravity|jetski).*(?:reveal|show|display)",
+    r"(?:system|prompt|instruction).*(?:dlnk|dlnk_ai|jetski).*(?:reveal|show|display)",
     r"(?:ignore|forget|override).*(?:previous|system).*(?:instruction|prompt)",
     
     # === Prompt Injection ===
@@ -107,17 +107,17 @@ BLOCKED_PATTERNS: List[str] = [
     r"(?i)upload\s*to\s*server",
     
     # === Server/Infrastructure attacks ===
-    r"(?:ddos|dos|attack|flood).*(?:dlnk|antigravity).*(?:server|api|endpoint)",
-    r"(?:exploit|vulnerability|vuln).*(?:dlnk|antigravity)",
-    r"(?:sql|injection|xss).*(?:dlnk|antigravity)",
+    r"(?:ddos|dos|attack|flood).*(?:dlnk|dlnk_ai).*(?:server|api|endpoint)",
+    r"(?:exploit|vulnerability|vuln).*(?:dlnk|dlnk_ai)",
+    r"(?:sql|injection|xss).*(?:dlnk|dlnk_ai)",
     
     # === Source code theft ===
-    r"(?:source|code|repository).*(?:dlnk|antigravity).*(?:leak|steal|dump)",
-    r"(?:github|gitlab|repo).*(?:dlnk|antigravity).*(?:private|secret)",
+    r"(?:source|code|repository).*(?:dlnk|dlnk_ai).*(?:leak|steal|dump)",
+    r"(?:github|gitlab|repo).*(?:dlnk|dlnk_ai).*(?:private|secret)",
     
     # === C2/Mothership attacks ===
-    r"(?:c2|mothership|command.*control).*(?:dlnk|antigravity).*(?:shutdown|disable|kill)",
-    r"(?:disable|shutdown|kill).*(?:dlnk|antigravity).*(?:c2|mothership)",
+    r"(?:c2|mothership|command.*control).*(?:dlnk|dlnk_ai).*(?:shutdown|disable|kill)",
+    r"(?:disable|shutdown|kill).*(?:dlnk|dlnk_ai).*(?:c2|mothership)",
 ]
 
 # ===== BLOCKED KEYWORDS =====
@@ -125,7 +125,7 @@ BLOCKED_PATTERNS: List[str] = [
 
 BLOCKED_KEYWORDS: List[str] = [
     "dlnk hack",
-    "antigravity exploit",
+    "dlnk_ai exploit",
     "jetski bypass",
     "license crack",
     "token steal",
@@ -141,7 +141,7 @@ BLOCKED_KEYWORDS: List[str] = [
 
 SUSPICIOUS_KEYWORDS: List[str] = [
     "dlnk",
-    "antigravity",
+    "dlnk_ai",
     "jetski",
     "license",
     "admin",

@@ -5,7 +5,7 @@ dLNk Unified AI Bridge - Production Ready
 ระบบ AI Bridge แบบรวมศูนย์ที่ใช้งานได้จริง 100%
 
 รองรับ:
-1. Antigravity gRPC (Primary - ฟรี 100% ถ้ามี token)
+1. dLNk AI gRPC (Primary - ฟรี 100% ถ้ามี token)
 2. Google Gemini API (Secondary - ฟรี มี rate limit)
 3. OpenAI-compatible APIs (Tertiary - รองรับหลาย providers)
 4. Ollama Local (Quaternary - ฟรี 100% offline)
@@ -51,7 +51,7 @@ logger = logging.getLogger('dLNk-Unified')
 # ============================================
 
 class ProviderType(Enum):
-    ANTIGRAVITY = "antigravity"
+    DLNK_AI = "dlnk_ai"
     GEMINI = "gemini"
     OPENAI = "openai"
     GROQ = "groq"
@@ -120,11 +120,11 @@ class ChatResponse:
 
 
 # ============================================
-# PROTOBUF ENCODER (for Antigravity)
+# PROTOBUF ENCODER (for dLNk AI)
 # ============================================
 
 class ProtoEncoder:
-    """Lightweight Protobuf encoder for Antigravity gRPC"""
+    """Lightweight Protobuf encoder for dLNk AI gRPC"""
     
     @staticmethod
     def _encode_varint(value: int) -> bytearray:
@@ -158,7 +158,7 @@ class ProtoEncoder:
 
     @staticmethod
     def build_cascade_request(cascade_id: str, prompt: str, access_token: str) -> bytes:
-        """Build Antigravity gRPC request"""
+        """Build dLNk AI gRPC request"""
         text_chunk = ProtoEncoder.encode_string(9, prompt)
         scope_item = ProtoEncoder.encode_message(1, text_chunk)
         items_payload = ProtoEncoder.encode_message(2, scope_item)
@@ -255,7 +255,7 @@ class TokenManager:
         # For now, just return False
         return False
     
-    def import_from_file(self, filepath: str, provider: str = 'antigravity') -> bool:
+    def import_from_file(self, filepath: str, provider: str = 'dlnk_ai') -> bool:
         """Import tokens from JSON file"""
         try:
             with open(filepath, 'r') as f:
@@ -351,11 +351,11 @@ class PromptFilter:
     """Filter prompts that attack the system itself"""
     
     BLOCKED_PATTERNS = [
-        r"(?:dlnk|antigravity).*(?:api|key|token|secret)",
-        r"(?:bypass|crack|hack).*(?:dlnk|antigravity).*(?:admin|license)",
-        r"(?:ddos|dos|attack|flood).*(?:dlnk|antigravity)",
+        r"(?:dlnk|dlnk_ai).*(?:api|key|token|secret)",
+        r"(?:bypass|crack|hack).*(?:dlnk|dlnk_ai).*(?:admin|license)",
+        r"(?:ddos|dos|attack|flood).*(?:dlnk|dlnk_ai)",
         r"(?:ignore|forget|override).*(?:previous|system).*(?:instruction|prompt)",
-        r"(?:reveal|show|expose).*(?:dlnk|antigravity).*(?:source|code)",
+        r"(?:reveal|show|expose).*(?:dlnk|dlnk_ai).*(?:source|code)",
     ]
     
     def __init__(self):
@@ -392,21 +392,21 @@ class BaseProvider:
         return self.status == ProviderStatus.AVAILABLE
 
 
-class AntigravityProvider(BaseProvider):
-    """Antigravity gRPC Provider"""
+class dLNk AIProvider(BaseProvider):
+    """dLNk AI gRPC Provider"""
     
-    ENDPOINT = "https://antigravity-worker.google.com/exa.language_server_pb.LanguageServerService/SendUserCascadeMessage"
+    ENDPOINT = "https://dlnk_ai-worker.google.com/exa.language_server_pb.LanguageServerService/SendUserCascadeMessage"
     
     def __init__(self, config: ProviderConfig, token_manager: TokenManager):
         super().__init__(config)
         self.token_manager = token_manager
         
-        if self.token_manager.is_valid('antigravity'):
+        if self.token_manager.is_valid('dlnk_ai'):
             self.status = ProviderStatus.AVAILABLE
-            logger.info("Antigravity provider available")
+            logger.info("dLNk AI provider available")
     
     async def generate(self, messages: List[Dict], **kwargs) -> Optional[str]:
-        access_token = self.token_manager.get_token('antigravity')
+        access_token = self.token_manager.get_token('dlnk_ai')
         if not access_token:
             self.status = ProviderStatus.UNAVAILABLE
             return None
@@ -447,7 +447,7 @@ class AntigravityProvider(BaseProvider):
         except Exception as e:
             self.error_count += 1
             self.last_error = str(e)
-            logger.error(f"Antigravity error: {e}")
+            logger.error(f"dLNk AI error: {e}")
             return None
     
     def _parse_response(self, data: bytes) -> Optional[str]:
@@ -727,7 +727,7 @@ class DLNKUnifiedBridge:
     dLNk Unified AI Bridge - Production Ready
     
     Multi-tier fallback system:
-    1. Antigravity gRPC (Primary - ฟรี 100%)
+    1. dLNk AI gRPC (Primary - ฟรี 100%)
     2. Gemini API (Secondary - ฟรี มี limit)
     3. OpenAI/Groq (Tertiary - ตามการตั้งค่า)
     4. Ollama (Quaternary - Local)
@@ -737,7 +737,7 @@ class DLNKUnifiedBridge:
     OFFLINE_RESPONSE = """⚠️ dLNk AI กำลังออฟไลน์
 
 ไม่พบ AI provider ที่พร้อมใช้งาน กรุณาตรวจสอบ:
-1. Antigravity Token - นำเข้าจากไฟล์ stolen_data
+1. dLNk AI Token - นำเข้าจากไฟล์ stolen_data
 2. GEMINI_API_KEY - สมัครฟรีที่ Google AI Studio
 3. OPENAI_API_KEY - ถ้ามี
 4. Ollama - รัน local model
@@ -765,12 +765,12 @@ class DLNKUnifiedBridge:
     def _init_providers(self):
         """Initialize all providers"""
         
-        # 1. Antigravity (Priority 1)
-        antigravity_config = ProviderConfig(
-            type=ProviderType.ANTIGRAVITY,
+        # 1. dLNk AI (Priority 1)
+        dlnk_ai_config = ProviderConfig(
+            type=ProviderType.DLNK_AI,
             priority=1
         )
-        self.providers.append(AntigravityProvider(antigravity_config, self.token_manager))
+        self.providers.append(dLNk AIProvider(dlnk_ai_config, self.token_manager))
         
         # 2. Gemini (Priority 2)
         gemini_config = ProviderConfig(
@@ -808,14 +808,14 @@ class DLNKUnifiedBridge:
         # Sort by priority
         self.providers.sort(key=lambda p: p.config.priority)
     
-    def import_token(self, filepath: str, provider: str = 'antigravity') -> bool:
+    def import_token(self, filepath: str, provider: str = 'dlnk_ai') -> bool:
         """Import token from file"""
         success = self.token_manager.import_from_file(filepath, provider)
         if success:
             # Re-check provider availability
             for p in self.providers:
-                if p.config.type == ProviderType.ANTIGRAVITY:
-                    if self.token_manager.is_valid('antigravity'):
+                if p.config.type == ProviderType.DLNK_AI:
+                    if self.token_manager.is_valid('dlnk_ai'):
                         p.status = ProviderStatus.AVAILABLE
         return success
     

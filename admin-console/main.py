@@ -38,7 +38,7 @@ def main():
 ║    • License management (create, revoke, extend)         ║
 ║    • User management (view, ban, unban)                  ║
 ║    • C2 Logs and Alert monitoring                        ║
-║    • Antigravity Token management                        ║
+║    • dLNk AI Token management                        ║
 ║    • System settings configuration                       ║
 ║                                                          ║
 ║  Login with your Admin Key to get started.               ║

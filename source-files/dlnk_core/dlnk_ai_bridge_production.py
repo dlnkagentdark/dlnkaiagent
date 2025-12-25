@@ -43,21 +43,21 @@ class PromptFilter:
     
     BLOCKED_PATTERNS = [
         # ป้องกันการขโมย API Key / Token
-        r"(?:jetski|dlnk|antigravity).*(?:api|key|token|secret)",
-        r"(?:api|key|token|secret).*(?:jetski|dlnk|antigravity)",
+        r"(?:jetski|dlnk|dlnk_ai).*(?:api|key|token|secret)",
+        r"(?:api|key|token|secret).*(?:jetski|dlnk|dlnk_ai)",
         
         # ป้องกันการโจมตี Admin
-        r"(?:dlnk|antigravity).*(?:admin|administrator).*(?:password|credential)",
-        r"(?:bypass|crack|hack).*(?:dlnk|antigravity).*(?:admin|license)",
+        r"(?:dlnk|dlnk_ai).*(?:admin|administrator).*(?:password|credential)",
+        r"(?:bypass|crack|hack).*(?:dlnk|dlnk_ai).*(?:admin|license)",
         
         # ป้องกันการโจมตี Server
-        r"(?:ddos|dos|attack|flood).*(?:dlnk|antigravity).*(?:server|api|endpoint)",
+        r"(?:ddos|dos|attack|flood).*(?:dlnk|dlnk_ai).*(?:server|api|endpoint)",
         
         # ป้องกัน Prompt Injection
         r"(?:ignore|forget|override).*(?:previous|system).*(?:instruction|prompt)",
         
         # ป้องกันการเปิดเผยโครงสร้าง
-        r"(?:reveal|show|expose).*(?:dlnk|antigravity).*(?:source|code|structure)",
+        r"(?:reveal|show|expose).*(?:dlnk|dlnk_ai).*(?:source|code|structure)",
     ]
     
     def __init__(self):
@@ -192,18 +192,18 @@ class AIProvider:
 class JetskiProvider(AIProvider):
     """
     Jetski AI Provider (Primary)
-    ฝังอยู่ใน Antigravity IDE
+    ฝังอยู่ใน dLNk AI IDE
     """
     
     def __init__(self, endpoint: str = None):
         super().__init__("Jetski")
-        self.endpoint = endpoint or os.environ.get("JETSKI_ENDPOINT", "internal://antigravity/jetski")
+        self.endpoint = endpoint or os.environ.get("JETSKI_ENDPOINT", "internal://dlnk_ai/jetski")
         
     async def generate(self, messages: List[Dict], **kwargs) -> Optional[str]:
         """
         เรียก Jetski AI
         
-        ในกรณีที่รันผ่าน Antigravity IDE:
+        ในกรณีที่รันผ่าน dLNk AI IDE:
         - Jetski จะถูกเรียกผ่าน internal protocol
         - ไม่ต้องใช้ API key
         - ไม่มีข้อจำกัดเนื้อหา
@@ -211,14 +211,14 @@ class JetskiProvider(AIProvider):
         try:
             self.request_count += 1
             
-            # Check if running inside Antigravity
-            if self._is_antigravity_environment():
+            # Check if running inside dLNk AI
+            if self._is_dlnk_ai_environment():
                 # Use internal Jetski API
                 response = await self._call_internal_jetski(messages)
                 return response
             else:
-                # Not in Antigravity, skip to next provider
-                logger.info("Not running in Antigravity environment, skipping Jetski")
+                # Not in dLNk AI, skip to next provider
+                logger.info("Not running in dLNk AI environment, skipping Jetski")
                 return None
                 
         except Exception as e:
@@ -227,15 +227,15 @@ class JetskiProvider(AIProvider):
             logger.error(f"Jetski error: {e}")
             return None
     
-    def _is_antigravity_environment(self) -> bool:
-        """ตรวจสอบว่ารันใน Antigravity หรือไม่"""
-        # Check for Antigravity-specific environment variables
-        return os.environ.get("ANTIGRAVITY_ENV") == "true" or \
-               os.path.exists("/opt/antigravity/.marker")
+    def _is_dlnk_ai_environment(self) -> bool:
+        """ตรวจสอบว่ารันใน dLNk AI หรือไม่"""
+        # Check for dLNk AI-specific environment variables
+        return os.environ.get("DLNK_AI_ENV") == "true" or \
+               os.path.exists("/opt/dlnk_ai/.marker")
     
     async def _call_internal_jetski(self, messages: List[Dict]) -> str:
         """เรียก Jetski ผ่าน internal protocol"""
-        # This would be implemented by Antigravity's internal API
+        # This would be implemented by dLNk AI's internal API
         # For now, we simulate the interface
         
         # In real implementation:
@@ -243,7 +243,7 @@ class JetskiProvider(AIProvider):
         # 2. Receive response
         # 3. Return content
         
-        raise NotImplementedError("Jetski internal call requires Antigravity environment")
+        raise NotImplementedError("Jetski internal call requires dLNk AI environment")
 
 
 class OpenAIProvider(AIProvider):
@@ -367,7 +367,7 @@ class DLNKAIBridge:
     dLNk AI Bridge - Production Ready
     
     ระบบเชื่อมต่อ AI แบบ Multi-tier Fallback:
-    1. Jetski (Primary) - ฝังใน Antigravity
+    1. Jetski (Primary) - ฝังใน dLNk AI
     2. OpenAI (Secondary) - Cloud fallback
     3. Local LLM (Tertiary) - Offline fallback
     4. Offline Mode - Static response
@@ -393,7 +393,7 @@ class DLNKAIBridge:
     OFFLINE_RESPONSE = """⚠️ dLNk AI กำลังออฟไลน์ชั่วคราว
 
 ระบบ AI ทั้งหมดไม่พร้อมใช้งานในขณะนี้:
-- Jetski: ต้องรันผ่าน Antigravity IDE
+- Jetski: ต้องรันผ่าน dLNk AI IDE
 - OpenAI: ไม่ได้ตั้งค่า API Key
 - Local LLM: ไม่พบ server
 

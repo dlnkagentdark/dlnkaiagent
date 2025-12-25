@@ -236,11 +236,11 @@ print("SUCCESS")
     test_code = """
 import sys
 sys.path.insert(0, '.')
-from grpc_client.antigravity_client import AntigravityClient
+from grpc_client.dlnk_ai_client import dLNk AIClient
 print("SUCCESS")
 """
     passed, output = run_in_subprocess(test_code, bridge_dir)
-    log_test("Antigravity Client", "SUCCESS" in output, output.strip() if not passed else "")
+    log_test("dLNk AI Client", "SUCCESS" in output, output.strip() if not passed else "")
     
     # Test Proto Encoder
     test_code = """

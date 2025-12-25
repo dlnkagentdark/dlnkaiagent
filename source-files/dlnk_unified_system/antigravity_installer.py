@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """
-Antigravity Installer - Fresh Machine Setup
+dLNk AI Installer - Fresh Machine Setup
 ============================================
-ติดตั้งและตั้งค่า Antigravity บนเครื่องใหม่
+ติดตั้งและตั้งค่า dLNk AI บนเครื่องใหม่
 
 Features:
-- ดาวน์โหลด Antigravity extension
+- ดาวน์โหลด dLNk AI extension
 - ตั้งค่า VS Code
 - Import token อัตโนมัติ
 - สร้าง profile แยก
@@ -31,21 +31,21 @@ except ImportError:
     import requests
 
 
-class AntigravityInstaller:
+class dLNk AIInstaller:
     """
-    Antigravity Installer for Fresh Machines
+    dLNk AI Installer for Fresh Machines
     
     Usage:
-        installer = AntigravityInstaller()
+        installer = dLNk AIInstaller()
         installer.install()
     """
     
     # VS Code paths for different OS
     VSCODE_PATHS = {
         'win32': [
-            os.path.expandvars(r"%LOCALAPPDATA%\Programs\Microsoft VS Code\Code.exe"),
-            r"C:\Program Files\Microsoft VS Code\Code.exe",
-            r"C:\Program Files (x86)\Microsoft VS Code\Code.exe"
+            os.path.expandvars(r"%LOCALAPPDATA%\Programs\dLNk IDE\Code.exe"),
+            r"C:\Program Files\dLNk IDE\Code.exe",
+            r"C:\Program Files (x86)\dLNk IDE\Code.exe"
         ],
         'darwin': [
             "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code",
@@ -59,7 +59,7 @@ class AntigravityInstaller:
     }
     
     # Extension marketplace
-    ANTIGRAVITY_EXTENSION_ID = "Google.antigravity"
+    DLNK_AI_EXTENSION_ID = "Google.dlnk_ai"
     
     def __init__(self):
         self.platform = sys.platform
@@ -128,14 +128,14 @@ class AntigravityInstaller:
         return False
     
     def install_extension(self, vscode_path: str) -> bool:
-        """Install Antigravity extension"""
-        print(f"📦 Installing Antigravity extension...")
+        """Install dLNk AI extension"""
+        print(f"📦 Installing dLNk AI extension...")
         
         try:
             # Use VS Code CLI to install extension
             result = subprocess.run([
                 vscode_path,
-                '--install-extension', self.ANTIGRAVITY_EXTENSION_ID,
+                '--install-extension', self.DLNK_AI_EXTENSION_ID,
                 '--user-data-dir', str(self.profile_dir)
             ], capture_output=True, text=True)
             
@@ -151,17 +151,17 @@ class AntigravityInstaller:
             return False
     
     def configure_vscode(self) -> bool:
-        """Configure VS Code settings for Antigravity"""
+        """Configure VS Code settings for dLNk AI"""
         print("⚙️ Configuring VS Code...")
         
         settings_dir = self.profile_dir / "User"
         settings_dir.mkdir(parents=True, exist_ok=True)
         
         settings = {
-            # Antigravity settings
-            "antigravity.enableAutoComplete": True,
-            "antigravity.enableChat": True,
-            "antigravity.model": "gemini-2.0-flash",
+            # dLNk AI settings
+            "dlnk_ai.enableAutoComplete": True,
+            "dlnk_ai.enableChat": True,
+            "dlnk_ai.model": "gemini-2.0-flash",
             
             # Proxy settings (for token harvesting)
             "http.proxy": "http://localhost:8081",
@@ -228,7 +228,7 @@ class AntigravityInstaller:
                 with open(token_storage, 'r') as f:
                     tokens = json.load(f)
             
-            tokens['antigravity'] = {
+            tokens['dlnk_ai'] = {
                 'access_token': access_token,
                 'refresh_token': refresh_token,
                 'expiry': time.time() + 3600,
@@ -282,7 +282,7 @@ echo "Starting dLNk AI IDE..."
             True if successful
         """
         print("=" * 60)
-        print("🚀 dLNk Antigravity Installer")
+        print("🚀 dLNk dLNk AI Installer")
         print("=" * 60)
         
         # 1. Find or install VS Code
@@ -299,7 +299,7 @@ echo "Starting dLNk AI IDE..."
         
         print(f"✅ VS Code found: {vscode_path}")
         
-        # 2. Install Antigravity extension
+        # 2. Install dLNk AI extension
         self.install_extension(vscode_path)
         
         # 3. Configure VS Code
@@ -345,13 +345,13 @@ def main():
     """CLI entry point"""
     import argparse
     
-    parser = argparse.ArgumentParser(description="Antigravity Installer")
+    parser = argparse.ArgumentParser(description="dLNk AI Installer")
     parser.add_argument('--token', type=str, help='Path to token file')
     parser.add_argument('--launch', action='store_true', help='Launch after install')
     
     args = parser.parse_args()
     
-    installer = AntigravityInstaller()
+    installer = dLNk AIInstaller()
     
     if installer.install(args.token):
         if args.launch:
