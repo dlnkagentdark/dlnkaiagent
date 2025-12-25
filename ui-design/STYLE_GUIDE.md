@@ -2,7 +2,7 @@
 
 **Version:** 1.0.0  
 **Author:** AI-04 UI/UX Designer  
-**Last Updated:** December 2024
+**Last Updated:** December 2025
 
 ---
 
@@ -511,7 +511,8 @@ ui-design/
 │   └── screenshots/        # UI screenshots
 ├── theme/
 │   ├── dlnk-dark-theme.json # VS Code theme
-│   └── colors.css          # CSS variables
+│   ├── colors.css          # CSS variables
+│   └── animations.css      # Animation library
 ├── logo/
 │   ├── dlnk-logo.svg       # Vector logo
 │   ├── dlnk-logo-16.png    # 16x16 icon
@@ -522,6 +523,7 @@ ui-design/
 │   └── dlnk-logo.ico       # Windows icon
 ├── icons/
 │   ├── activity-bar-icon.svg
+│   ├── status-icons.svg      # Status indicator icons
 │   └── file-icons/
 └── splash/
     ├── splash_screen.py    # Splash screen UI
