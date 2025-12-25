@@ -2,10 +2,10 @@
 """
 dLNk AI Bridge - Main Entry Point
 ==================================
-Connects dLNk IDE to Antigravity/Jetski gRPC API with fallback support.
+Connects dLNk IDE to dLNk AI/Jetski gRPC API with fallback support.
 
 Features:
-- gRPC Client for Antigravity
+- gRPC Client for dLNk AI
 - Token Manager with auto-refresh
 - WebSocket Server (port 8765)
 - REST API Server (port 8766)
@@ -25,7 +25,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent))
 
 from config import Config
-from grpc_client.antigravity_client import AntigravityClient
+from grpc_client.dlnk_ai_client import dLNk AIClient
 from token_manager.token_refresh import TokenManager
 from servers.websocket_server import WebSocketServer
 from servers.rest_server import RESTServer
@@ -55,7 +55,7 @@ class AIBridge:
     def __init__(self):
         self.config = Config()
         self.token_manager: TokenManager = None
-        self.grpc_client: AntigravityClient = None
+        self.grpc_client: dLNk AIClient = None
         self.provider_manager: ProviderManager = None
         self.ws_server: WebSocketServer = None
         self.rest_server: RESTServer = None
@@ -78,9 +78,9 @@ class AIBridge:
         logger.info(f"Token Manager started - Token: {token_status}")
         
         # 2. Initialize gRPC Client
-        logger.info("Initializing Antigravity gRPC Client...")
-        self.grpc_client = AntigravityClient(
-            endpoint=self.config.ANTIGRAVITY_ENDPOINT,
+        logger.info("Initializing dLNk AI gRPC Client...")
+        self.grpc_client = dLNk AIClient(
+            endpoint=self.config.DLNK_AI_ENDPOINT,
             token_manager=self.token_manager
         )
         

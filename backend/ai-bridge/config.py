@@ -22,13 +22,13 @@ class Config:
     # ============================================
     GRPC_ENDPOINT: str = os.getenv(
         'DLNK_GRPC_ENDPOINT', 
-        'antigravity-worker.google.com'
+        'dlnk_ai-worker.google.com'
     )
     GRPC_USE_SSL: bool = True
     GRPC_TIMEOUT: float = 30.0
     
-    # Antigravity API Endpoint
-    ANTIGRAVITY_ENDPOINT: str = "https://antigravity-worker.google.com/exa.language_server_pb.LanguageServerService/SendUserCascadeMessage"
+    # dLNk AI API Endpoint
+    DLNK_AI_ENDPOINT: str = "https://dlnk_ai-worker.google.com/exa.language_server_pb.LanguageServerService/SendUserCascadeMessage"
     
     # Google OAuth Configuration
     GOOGLE_CLIENT_ID: str = "1090535352638-q5m3558i87588pnd64fjm614un18k0id.apps.googleusercontent.com"
@@ -38,7 +38,7 @@ class Config:
     # Token Settings
     # ============================================
     TOKEN_STORAGE_PATH: Path = field(default_factory=lambda: Path.home() / ".dlnk" / "tokens")
-    TOKEN_FILE: str = os.getenv('DLNK_TOKEN_FILE', 'antigravity_tokens.enc')
+    TOKEN_FILE: str = os.getenv('DLNK_TOKEN_FILE', 'dlnk_ai_tokens.enc')
     TOKEN_REFRESH_INTERVAL: int = 55 * 60  # 55 minutes (token expires in 60 min)
     TOKEN_REFRESH_BUFFER: int = 5 * 60  # 5 minutes buffer before expiry
     
@@ -65,7 +65,7 @@ class Config:
     # ============================================
     # Fallback Providers (Priority Order)
     # ============================================
-    # 1. Antigravity (Primary - Free with token)
+    # 1. dLNk AI (Primary - Free with token)
     # 2. Gemini (Secondary - Free tier)
     # 3. OpenAI (Tertiary - Paid)
     # 4. Groq (Quaternary - Free tier)
@@ -112,7 +112,7 @@ Powered by dLNk IDE - No Limits AI"""
     OFFLINE_RESPONSE: str = """⚠️ dLNk AI กำลังออฟไลน์
 
 ไม่พบ AI provider ที่พร้อมใช้งาน กรุณาตรวจสอบ:
-1. Antigravity Token - นำเข้า token จากไฟล์
+1. dLNk AI Token - นำเข้า token จากไฟล์
 2. GEMINI_API_KEY - ตั้งค่าสำหรับ fallback
 3. OPENAI_API_KEY - ตั้งค่าสำหรับ fallback
 
@@ -128,8 +128,8 @@ Powered by dLNk IDE - No Limits AI"""
         """Get list of configured providers"""
         providers = []
         
-        # Antigravity is always potentially available
-        providers.append("antigravity")
+        # dLNk AI is always potentially available
+        providers.append("dlnk_ai")
         
         if self.GEMINI_API_KEY:
             providers.append("gemini")

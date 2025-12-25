@@ -4,7 +4,7 @@ dLNk AI Bridge - Provider Manager
 Manages multiple AI providers with automatic fallback.
 
 Priority Order:
-1. Antigravity (Primary - Free with token)
+1. dLNk AI (Primary - Free with token)
 2. Gemini (Secondary - Free tier)
 3. OpenAI (Tertiary - Paid)
 4. Groq (Quaternary - Free tier)
@@ -51,7 +51,7 @@ class ProviderManager:
     
     Usage:
         manager = ProviderManager(
-            primary_client=antigravity_client,
+            primary_client=dlnk_ai_client,
             config=config
         )
         result = await manager.chat("Hello!")
@@ -72,7 +72,7 @@ Powered by dLNk IDE - No Limits AI"""
     OFFLINE_RESPONSE = """⚠️ dLNk AI กำลังออฟไลน์
 
 ไม่พบ AI provider ที่พร้อมใช้งาน กรุณาตรวจสอบ:
-1. Antigravity Token - นำเข้า token จากไฟล์
+1. dLNk AI Token - นำเข้า token จากไฟล์
 2. GEMINI_API_KEY - ตั้งค่าสำหรับ fallback
 3. OPENAI_API_KEY - ตั้งค่าสำหรับ fallback
 4. Ollama - ติดตั้งและรัน local LLM
@@ -81,14 +81,14 @@ Powered by dLNk IDE - No Limits AI"""
 
     def __init__(
         self,
-        primary_client = None,  # AntigravityClient
+        primary_client = None,  # dLNk AIClient
         config = None
     ):
         """
         Initialize Provider Manager
         
         Args:
-            primary_client: Primary AI client (Antigravity)
+            primary_client: Primary AI client (dLNk AI)
             config: Configuration object
         """
         self.config = config
@@ -100,7 +100,7 @@ Powered by dLNk IDE - No Limits AI"""
         
         # Provider priority order
         self.priority_order = [
-            'antigravity',
+            'dlnk_ai',
             'gemini',
             'openai',
             'groq',
@@ -120,7 +120,7 @@ Powered by dLNk IDE - No Limits AI"""
     def _init_providers(self):
         """Initialize fallback providers from config"""
         if self.primary_client:
-            self.providers['antigravity'] = self.primary_client
+            self.providers['dlnk_ai'] = self.primary_client
         
         # Gemini
         gemini_key = None
@@ -259,7 +259,7 @@ Powered by dLNk IDE - No Limits AI"""
                 response = None
                 
                 # Call provider-specific method
-                if provider_name == 'antigravity':
+                if provider_name == 'dlnk_ai':
                     result = await provider.chat(
                         message=message,
                         system_prompt=system,
@@ -340,7 +340,7 @@ Powered by dLNk IDE - No Limits AI"""
                 logger.info(f"Streaming from provider: {provider_name}")
                 
                 # Get streaming method
-                if provider_name == 'antigravity':
+                if provider_name == 'dlnk_ai':
                     stream = provider.chat_stream(message, system_prompt=system)
                 else:
                     stream = provider.generate_stream(message, system_prompt=system)

@@ -6,7 +6,7 @@ Unified AI Gateway ที่รวม providers ทั้งหมดเข้�
 
 Features:
 - REST API compatible with OpenAI format
-- Multi-provider fallback (Antigravity → Gemini → Ollama → Offline)
+- Multi-provider fallback (dLNk AI → Gemini → Ollama → Offline)
 - Token management integration
 - Rate limiting and load balancing
 - WebSocket support for streaming
@@ -39,7 +39,7 @@ except ImportError:
 
 # Local imports
 try:
-    from dlnk_antigravity_bridge import DLNKAntigravityBridge, TokenManager
+    from dlnk_dlnk_ai_bridge import DLNKdLNk AIBridge, TokenManager
     from dlnk_ai_bridge_real import DLNKAIBridgeReal
 except ImportError:
     # Fallback if running standalone
@@ -177,7 +177,7 @@ class AIProviderManager:
     Manages multiple AI providers with fallback
     
     Priority:
-    1. Antigravity gRPC (free, no limits with token)
+    1. dLNk AI gRPC (free, no limits with token)
     2. Gemini API (free tier with limits)
     3. OpenAI-compatible (paid)
     4. Ollama (local)
@@ -198,20 +198,20 @@ class AIProviderManager:
         """Initialize available providers"""
         # Try to import and init each provider
         
-        # 1. Antigravity Bridge
+        # 1. dLNk AI Bridge
         try:
-            from dlnk_antigravity_bridge import DLNKAntigravityBridge
-            bridge = DLNKAntigravityBridge()
+            from dlnk_dlnk_ai_bridge import DLNKdLNk AIBridge
+            bridge = DLNKdLNk AIBridge()
             if bridge.get_available_providers():
                 self.providers.append({
-                    'name': 'antigravity',
+                    'name': 'dlnk_ai',
                     'instance': bridge,
                     'priority': 1,
                     'available': True
                 })
-                logger.info("Antigravity provider initialized")
+                logger.info("dLNk AI provider initialized")
         except Exception as e:
-            logger.warning(f"Antigravity provider not available: {e}")
+            logger.warning(f"dLNk AI provider not available: {e}")
         
         # 2. Real AI Bridge (OpenAI/Groq/Ollama)
         try:
@@ -255,8 +255,8 @@ class AIProviderManager:
             provider_name = provider['name']
             
             try:
-                if provider_name == 'antigravity':
-                    # Use Antigravity Bridge
+                if provider_name == 'dlnk_ai':
+                    # Use dLNk AI Bridge
                     bridge = provider['instance']
                     prompt = messages[-1]['content'] if messages else ""
                     result = await bridge.chat(prompt, **kwargs)
@@ -266,7 +266,7 @@ class AIProviderManager:
                         return {
                             'success': True,
                             'response': result['response'],
-                            'provider': f"antigravity/{result['provider']}"
+                            'provider': f"dlnk_ai/{result['provider']}"
                         }
                 
                 elif provider_name == 'openai_compatible':
@@ -374,8 +374,8 @@ class AIProviderManager:
         models = ['dlnk-ai', 'dlnk-ai-fast']
         
         for provider in self.providers:
-            if provider['name'] == 'antigravity':
-                models.append('antigravity-cascade')
+            if provider['name'] == 'dlnk_ai':
+                models.append('dlnk_ai-cascade')
             elif provider['name'] == 'gemini_direct':
                 models.append('gemini-2.0-flash')
             elif provider['name'] == 'openai_compatible':
@@ -589,7 +589,7 @@ async def chat_completions(request: ChatCompletionRequest, req: Request):
 async def import_token(filepath: str):
     """Import token from file"""
     try:
-        from dlnk_antigravity_bridge import TokenManager
+        from dlnk_dlnk_ai_bridge import TokenManager
         manager = TokenManager()
         success = manager.import_from_file(filepath)
         
@@ -605,7 +605,7 @@ async def import_token(filepath: str):
 async def set_token(access_token: str, refresh_token: str = None):
     """Set token manually"""
     try:
-        from dlnk_antigravity_bridge import TokenManager
+        from dlnk_dlnk_ai_bridge import TokenManager
         manager = TokenManager()
         manager.set_tokens(access_token, refresh_token)
         
@@ -621,7 +621,7 @@ async def set_token(access_token: str, refresh_token: str = None):
 async def token_status():
     """Get token status"""
     try:
-        from dlnk_antigravity_bridge import TokenManager
+        from dlnk_dlnk_ai_bridge import TokenManager
         manager = TokenManager()
         
         return {

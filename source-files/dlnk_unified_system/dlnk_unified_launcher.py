@@ -2,11 +2,11 @@
 """
 dLNk Unified System - All-in-One Launcher
 ==========================================
-รวม Antigravity + dLNk IDE เป็นแอพเดียว
+รวม dLNk AI + dLNk IDE เป็นแอพเดียว
 
 Features:
 - Token Harvesting & Auto-Refresh
-- gRPC Antigravity Integration
+- gRPC dLNk AI Integration
 - Multi-Provider AI Bridge
 - License Management
 - VS Code Fork Integration
@@ -63,8 +63,8 @@ class Config:
     SESSION_DIR = DLNK_DIR / "sessions"
     LOG_DIR = DLNK_DIR / "logs"
     
-    # Antigravity
-    ANTIGRAVITY_ENDPOINT = "https://antigravity-worker.google.com/exa.language_server_pb.LanguageServerService/SendUserCascadeMessage"
+    # dLNk AI
+    DLNK_AI_ENDPOINT = "https://dlnk_ai-worker.google.com/exa.language_server_pb.LanguageServerService/SendUserCascadeMessage"
     
     # OAuth (for token refresh)
     OAUTH_CLIENT_ID = "1090535352638-q5m3558i87588pnd64fjm614un18k0id.apps.googleusercontent.com"
@@ -92,7 +92,7 @@ class Config:
 # ============================================
 
 class ProtoEncoder:
-    """Lightweight Protobuf encoder for Antigravity gRPC"""
+    """Lightweight Protobuf encoder for dLNk AI gRPC"""
     
     @staticmethod
     def _encode_varint(value: int) -> bytearray:
@@ -126,7 +126,7 @@ class ProtoEncoder:
 
     @staticmethod
     def build_cascade_request(cascade_id: str, prompt: str, access_token: str) -> bytes:
-        """Build Antigravity gRPC request"""
+        """Build dLNk AI gRPC request"""
         text_chunk = ProtoEncoder.encode_string(9, prompt)
         scope_item = ProtoEncoder.encode_message(1, text_chunk)
         items_payload = ProtoEncoder.encode_message(2, scope_item)
@@ -209,7 +209,7 @@ class UnifiedTokenManager:
         self._save()
         logger.info(f"Token set for {provider}")
     
-    def get_token(self, provider: str = 'antigravity') -> Optional[str]:
+    def get_token(self, provider: str = 'dlnk_ai') -> Optional[str]:
         """Get valid token for provider"""
         if provider not in self.tokens:
             return None
@@ -228,7 +228,7 @@ class UnifiedTokenManager:
     
     def _refresh_token(self, provider: str) -> bool:
         """Refresh token using OAuth"""
-        if provider != 'antigravity':
+        if provider != 'dlnk_ai':
             return False
         
         token_data = self.tokens.get(provider, {})
@@ -273,7 +273,7 @@ class UnifiedTokenManager:
             logger.error(f"Token refresh error: {e}")
             return False
     
-    def import_from_file(self, filepath: str, provider: str = 'antigravity') -> bool:
+    def import_from_file(self, filepath: str, provider: str = 'dlnk_ai') -> bool:
         """Import tokens from JSON file (stolen_data format)"""
         try:
             with open(filepath, 'r') as f:
@@ -300,7 +300,7 @@ class UnifiedTokenManager:
             logger.error(f"Failed to import tokens: {e}")
             return False
     
-    def import_from_directory(self, directory: str, provider: str = 'antigravity') -> int:
+    def import_from_directory(self, directory: str, provider: str = 'dlnk_ai') -> int:
         """Import tokens from all JSON files in directory"""
         count = 0
         dir_path = Path(directory)
@@ -333,7 +333,7 @@ class UnifiedTokenManager:
         """Stop auto-refresh thread"""
         self._running = False
     
-    def is_valid(self, provider: str = 'antigravity') -> bool:
+    def is_valid(self, provider: str = 'dlnk_ai') -> bool:
         """Check if token is valid"""
         return self.get_token(provider) is not None
     
@@ -352,15 +352,15 @@ class UnifiedTokenManager:
 
 
 # ============================================
-# ANTIGRAVITY CLIENT
+# DLNK_AI CLIENT
 # ============================================
 
-class AntigravityClient:
+class dLNk AIClient:
     """
-    Direct Antigravity gRPC Client
+    Direct dLNk AI gRPC Client
     
     Features:
-    - Direct gRPC calls to Antigravity endpoint
+    - Direct gRPC calls to dLNk AI endpoint
     - Response parsing
     - Error handling
     """
@@ -374,14 +374,14 @@ class AntigravityClient:
         }
     
     async def chat(self, prompt: str, **kwargs) -> Dict[str, Any]:
-        """Send chat request to Antigravity"""
-        access_token = self.token_manager.get_token('antigravity')
+        """Send chat request to dLNk AI"""
+        access_token = self.token_manager.get_token('dlnk_ai')
         
         if not access_token:
             return {
                 'success': False,
-                'response': 'No valid Antigravity token available',
-                'provider': 'antigravity'
+                'response': 'No valid dLNk AI token available',
+                'provider': 'dlnk_ai'
             }
         
         cascade_id = str(uuid.uuid4())
@@ -401,7 +401,7 @@ class AntigravityClient:
             
             async with httpx.AsyncClient(http2=True) as client:
                 response = await client.post(
-                    Config.ANTIGRAVITY_ENDPOINT,
+                    Config.DLNK_AI_ENDPOINT,
                     content=payload,
                     headers=headers,
                     timeout=60.0
@@ -413,7 +413,7 @@ class AntigravityClient:
                     return {
                         'success': True,
                         'response': text or 'Response received but could not parse',
-                        'provider': 'antigravity',
+                        'provider': 'dlnk_ai',
                         'cascade_id': cascade_id
                     }
                 else:
@@ -421,16 +421,16 @@ class AntigravityClient:
                     return {
                         'success': False,
                         'response': f'HTTP {response.status_code}',
-                        'provider': 'antigravity'
+                        'provider': 'dlnk_ai'
                     }
                     
         except Exception as e:
             self.stats['errors'] += 1
-            logger.error(f"Antigravity error: {e}")
+            logger.error(f"dLNk AI error: {e}")
             return {
                 'success': False,
                 'response': str(e),
-                'provider': 'antigravity'
+                'provider': 'dlnk_ai'
             }
     
     def _parse_response(self, data: bytes) -> Optional[str]:
@@ -477,7 +477,7 @@ class UnifiedAIBridge:
     Unified AI Bridge - Multi-Provider Support
     
     Priority:
-    1. Antigravity (Free with token)
+    1. dLNk AI (Free with token)
     2. Gemini (Free with API key)
     3. OpenAI-compatible (Configurable)
     4. Ollama (Local)
@@ -500,7 +500,7 @@ Powered by dLNk IDE - No Limits AI"""
 
     def __init__(self, token_manager: UnifiedTokenManager):
         self.token_manager = token_manager
-        self.antigravity = AntigravityClient(token_manager)
+        self.dlnk_ai = dLNk AIClient(token_manager)
         self.sessions: Dict[str, List] = {}
         
         # Stats
@@ -530,9 +530,9 @@ Powered by dLNk IDE - No Limits AI"""
         # Try providers in order
         result = None
         
-        # 1. Antigravity
-        if self.token_manager.is_valid('antigravity'):
-            result = await self.antigravity.chat(full_prompt, **kwargs)
+        # 1. dLNk AI
+        if self.token_manager.is_valid('dlnk_ai'):
+            result = await self.dlnk_ai.chat(full_prompt, **kwargs)
             if result['success']:
                 self.successful_requests += 1
                 self.sessions[session_id].append({
@@ -682,8 +682,8 @@ Powered by dLNk IDE - No Limits AI"""
         """Get list of available providers"""
         providers = []
         
-        if self.token_manager.is_valid('antigravity'):
-            providers.append('antigravity')
+        if self.token_manager.is_valid('dlnk_ai'):
+            providers.append('dlnk_ai')
         if os.environ.get('GEMINI_API_KEY'):
             providers.append('gemini')
         if os.environ.get('OPENAI_API_KEY'):
@@ -706,7 +706,7 @@ Powered by dLNk IDE - No Limits AI"""
             'total_requests': self.total_requests,
             'successful_requests': self.successful_requests,
             'active_sessions': len(self.sessions),
-            'antigravity_stats': self.antigravity.stats,
+            'dlnk_ai_stats': self.dlnk_ai.stats,
             'available_providers': self.get_available_providers()
         }
 
@@ -949,9 +949,9 @@ if HAS_GUI:
         def _launch_vscode(self):
             """Launch VS Code with proxy"""
             vscode_paths = [
-                os.path.expandvars(r"%LOCALAPPDATA%\Programs\Microsoft VS Code\Code.exe"),
-                r"C:\Program Files\Microsoft VS Code\Code.exe",
-                r"C:\Program Files (x86)\Microsoft VS Code\Code.exe",
+                os.path.expandvars(r"%LOCALAPPDATA%\Programs\dLNk IDE\Code.exe"),
+                r"C:\Program Files\dLNk IDE\Code.exe",
+                r"C:\Program Files (x86)\dLNk IDE\Code.exe",
                 "/usr/bin/code",
                 "/usr/local/bin/code"
             ]

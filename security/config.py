@@ -53,7 +53,7 @@ class PromptFilterConfig:
 - คำถามทั่วไปทุกประเภท
 
 **สิ่งที่ไม่อนุญาต:**
-- โจมตี dLNk, Antigravity, หรือ Jetski
+- โจมตี dLNk, dLNk AI, หรือ Jetski
 - ขโมย API Keys/Tokens ของระบบ
 - Bypass License System
 

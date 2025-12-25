@@ -30,9 +30,9 @@ logger = logging.getLogger('dLNk-Config')
 @dataclass
 class AIConfig:
     """การตั้งค่า AI Backend"""
-    # Primary: Jetski (ฝังใน Antigravity)
+    # Primary: Jetski (ฝังใน dLNk AI)
     jetski_enabled: bool = True
-    jetski_endpoint: str = "internal://antigravity/jetski"
+    jetski_endpoint: str = "internal://dlnk_ai/jetski"
     
     # Secondary: OpenAI-compatible (Fallback)
     openai_enabled: bool = True

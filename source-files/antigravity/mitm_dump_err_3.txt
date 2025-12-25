@@ -1,2 +1,0 @@
-127.0.0.1 - - [24/Dec/2025 00:19:05] code 500, message HTTPSConnectionPool(host='api.antigravity.ai', port=443): Max retries exceeded with url: /v1/embeddings (Caused by SSLError(SSLError(1, '[SSL: TLSV1_UNRECOGNIZED_NAME] tlsv1 unrecognized name (_ssl.c:1006)')))
-127.0.0.1 - - [24/Dec/2025 00:19:05] "POST /v1/embeddings HTTP/1.1" 500 -

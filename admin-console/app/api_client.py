@@ -232,7 +232,7 @@ class APIClient:
     # ===== Tokens =====
     
     def get_tokens(self) -> List[Dict]:
-        """Get Antigravity tokens"""
+        """Get dLNk AI tokens"""
         result = self._request('GET', '/api/tokens')
         if result['success']:
             return result['data']

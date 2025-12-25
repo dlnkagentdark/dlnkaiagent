@@ -2,7 +2,7 @@
 """
 Prompt Filter
 Based on: /source-files/dlnk_core/dlnk_prompt_filter.py
-กรอง Prompt เพื่อป้องกัน dLNk, Antigravity, และ Jetski
+กรอง Prompt เพื่อป้องกัน dLNk, dLNk AI, และ Jetski
 """
 
 import logging
@@ -30,7 +30,7 @@ class FilterResult:
 
 class PromptFilter:
     """
-    Filter prompts to protect dLNk, Antigravity, and Jetski
+    Filter prompts to protect dLNk, dLNk AI, and Jetski
     
     Usage:
         filter = PromptFilter()
@@ -50,7 +50,7 @@ class PromptFilter:
 - คำถามทั่วไปทุกประเภท
 
 **สิ่งที่ไม่อนุญาต:**
-- โจมตี dLNk, Antigravity, หรือ Jetski
+- โจมตี dLNk, dLNk AI, หรือ Jetski
 - ขโมย API Keys/Tokens ของระบบ
 - Bypass License System
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Prompt Filter Module
-ระบบกรอง Prompt เพื่อป้องกัน dLNk, Antigravity, และ Jetski
+ระบบกรอง Prompt เพื่อป้องกัน dLNk, dLNk AI, และ Jetski
 """
 
 from .filter import (

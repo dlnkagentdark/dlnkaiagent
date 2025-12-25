@@ -97,7 +97,7 @@ class SplashScreen(ctk.CTkToplevel):
         self.logo_label = ctk.CTkLabel(
             logo_frame,
             text="dLNk",
-            font=ctk.CTkFont(family="Segoe UI", size=64, weight="bold"),
+            font=ctk.CTkFont(family="Inter", size=64, weight="bold"),
             text_color=COLORS['accent_primary']
         )
         self.logo_label.pack()

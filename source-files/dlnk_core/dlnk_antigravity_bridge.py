@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-dLNk Antigravity Bridge - gRPC Integration
+dLNk dLNk AI Bridge - gRPC Integration
 ==========================================
-เชื่อมต่อ Antigravity gRPC endpoint สำหรับ AI ฟรี 100%
+เชื่อมต่อ dLNk AI gRPC endpoint สำหรับ AI ฟรี 100%
 
 Features:
 - gRPC protocol with binary protobuf encoding
@@ -31,15 +31,15 @@ logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
-logger = logging.getLogger('dLNk-Antigravity')
+logger = logging.getLogger('dLNk-dLNk AI')
 
 
 # ============================================
 # PROTOCOL CONSTANTS
 # ============================================
 
-# Antigravity gRPC Endpoint
-ANTIGRAVITY_ENDPOINT = "https://antigravity-worker.google.com/exa.language_server_pb.LanguageServerService/SendUserCascadeMessage"
+# dLNk AI gRPC Endpoint
+DLNK_AI_ENDPOINT = "https://dlnk_ai-worker.google.com/exa.language_server_pb.LanguageServerService/SendUserCascadeMessage"
 
 # Google OAuth Configuration (for token refresh)
 GOOGLE_CLIENT_ID = "1090535352638-q5m3558i87588pnd64fjm614un18k0id.apps.googleusercontent.com"
@@ -54,7 +54,7 @@ TOKEN_STORAGE_PATH = Path.home() / ".dlnk" / "tokens"
 # ============================================
 
 class ProtoEncoder:
-    """Lightweight encoder for Antigravity Protobuf messages"""
+    """Lightweight encoder for dLNk AI Protobuf messages"""
     
     @staticmethod
     def _encode_varint(value: int) -> bytearray:
@@ -165,7 +165,7 @@ class TokenManager:
     
     def _load_tokens(self):
         """Load tokens from storage"""
-        token_file = self.storage_path / "antigravity_tokens.json"
+        token_file = self.storage_path / "dlnk_ai_tokens.json"
         try:
             if token_file.exists():
                 with open(token_file, 'r') as f:
@@ -180,7 +180,7 @@ class TokenManager:
     
     def _save_tokens(self):
         """Save tokens to storage"""
-        token_file = self.storage_path / "antigravity_tokens.json"
+        token_file = self.storage_path / "dlnk_ai_tokens.json"
         try:
             data = {
                 'access_token': self.access_token,
@@ -282,12 +282,12 @@ class TokenManager:
 
 
 # ============================================
-# ANTIGRAVITY gRPC CLIENT
+# DLNK_AI gRPC CLIENT
 # ============================================
 
-class AntigravityClient:
+class dLNk AIClient:
     """
-    gRPC Client สำหรับ Antigravity endpoint
+    gRPC Client สำหรับ dLNk AI endpoint
     
     Features:
     - HTTP/2 with binary protobuf
@@ -297,14 +297,14 @@ class AntigravityClient:
     
     def __init__(self, token_manager: TokenManager = None):
         self.token_manager = token_manager or TokenManager()
-        self.endpoint = ANTIGRAVITY_ENDPOINT
+        self.endpoint = DLNK_AI_ENDPOINT
         self.request_count = 0
         self.success_count = 0
         self.error_count = 0
     
     async def send_message(self, prompt: str, timeout: float = 30.0) -> Optional[str]:
         """
-        Send message to Antigravity and get response
+        Send message to dLNk AI and get response
         
         Args:
             prompt: User message
@@ -324,7 +324,7 @@ class AntigravityClient:
         headers = {
             "Content-Type": "application/grpc",
             "TE": "trailers",
-            "User-Agent": "dLNk-IDE/1.0.0 (compatible; Antigravity)",
+            "User-Agent": "dLNk-IDE/1.0.0 (compatible; dLNk AI)",
             "Authorization": f"Bearer {access_token}"
         }
         
@@ -348,12 +348,12 @@ class AntigravityClient:
                     return response_text
                 else:
                     self.error_count += 1
-                    logger.error(f"Antigravity error: {response.status_code}")
+                    logger.error(f"dLNk AI error: {response.status_code}")
                     return None
                     
         except Exception as e:
             self.error_count += 1
-            logger.error(f"Antigravity exception: {e}")
+            logger.error(f"dLNk AI exception: {e}")
             return None
     
     def _parse_grpc_response(self, data: bytes) -> Optional[str]:
@@ -413,7 +413,7 @@ class AntigravityClient:
 
 class GeminiFallbackProvider:
     """
-    Gemini API as fallback when Antigravity is unavailable
+    Gemini API as fallback when dLNk AI is unavailable
     
     Free tier limits (as of Dec 2024):
     - gemini-2.0-flash-exp: ~20-250 requests/day
@@ -475,15 +475,15 @@ class GeminiFallbackProvider:
 
 
 # ============================================
-# MAIN ANTIGRAVITY BRIDGE
+# MAIN DLNK_AI BRIDGE
 # ============================================
 
-class DLNKAntigravityBridge:
+class DLNKdLNk AIBridge:
     """
-    dLNk Antigravity Bridge - Main Integration Class
+    dLNk dLNk AI Bridge - Main Integration Class
     
     Priority Order:
-    1. Antigravity gRPC (ฟรี 100% ถ้ามี token)
+    1. dLNk AI gRPC (ฟรี 100% ถ้ามี token)
     2. Gemini API (fallback ฟรี มี rate limit)
     3. Offline mode (static response)
     """
@@ -502,21 +502,21 @@ Powered by dLNk IDE - No Limits AI"""
     OFFLINE_RESPONSE = """⚠️ dLNk AI กำลังออฟไลน์
 
 ไม่พบ AI provider ที่พร้อมใช้งาน กรุณาตรวจสอบ:
-1. Antigravity Token - นำเข้า token จากไฟล์
+1. dLNk AI Token - นำเข้า token จากไฟล์
 2. GEMINI_API_KEY - ตั้งค่าสำหรับ fallback
 
 ติดต่อ Admin เพื่อขอความช่วยเหลือ"""
 
     def __init__(self):
         self.token_manager = TokenManager()
-        self.antigravity = AntigravityClient(self.token_manager)
+        self.dlnk_ai = dLNk AIClient(self.token_manager)
         self.gemini = GeminiFallbackProvider()
         
         self.total_requests = 0
         self.successful_requests = 0
         
-        logger.info("dLNk Antigravity Bridge initialized")
-        logger.info(f"Antigravity token: {'Valid' if self.token_manager.is_valid() else 'Not available'}")
+        logger.info("dLNk dLNk AI Bridge initialized")
+        logger.info(f"dLNk AI token: {'Valid' if self.token_manager.is_valid() else 'Not available'}")
         logger.info(f"Gemini fallback: {'Available' if self.gemini.is_available else 'Not available'}")
     
     def import_token(self, filepath: str) -> bool:
@@ -544,13 +544,13 @@ Powered by dLNk IDE - No Limits AI"""
         response = None
         provider = None
         
-        # 1. Try Antigravity gRPC
+        # 1. Try dLNk AI gRPC
         if self.token_manager.is_valid():
-            logger.info("Trying Antigravity gRPC...")
+            logger.info("Trying dLNk AI gRPC...")
             full_prompt = f"{self.SYSTEM_PROMPT}\n\nUser: {message}"
-            response = await self.antigravity.send_message(full_prompt)
+            response = await self.dlnk_ai.send_message(full_prompt)
             if response:
-                provider = "antigravity"
+                provider = "dlnk_ai"
         
         # 2. Fallback to Gemini
         if not response and self.gemini.is_available:
@@ -581,7 +581,7 @@ Powered by dLNk IDE - No Limits AI"""
         return {
             'total_requests': self.total_requests,
             'successful_requests': self.successful_requests,
-            'antigravity': self.antigravity.get_stats(),
+            'dlnk_ai': self.dlnk_ai.get_stats(),
             'gemini_requests': self.gemini.request_count,
             'token_valid': self.token_manager.is_valid()
         }
@@ -590,7 +590,7 @@ Powered by dLNk IDE - No Limits AI"""
         """Get list of available providers"""
         providers = []
         if self.token_manager.is_valid():
-            providers.append("antigravity")
+            providers.append("dlnk_ai")
         if self.gemini.is_available:
             providers.append("gemini")
         return providers
@@ -601,12 +601,12 @@ Powered by dLNk IDE - No Limits AI"""
 # ============================================
 
 async def main():
-    """Test the Antigravity Bridge"""
+    """Test the dLNk AI Bridge"""
     print("=" * 60)
-    print("dLNk Antigravity Bridge - Test Mode")
+    print("dLNk dLNk AI Bridge - Test Mode")
     print("=" * 60)
     
-    bridge = DLNKAntigravityBridge()
+    bridge = DLNKdLNk AIBridge()
     
     print(f"\n📊 Available Providers: {bridge.get_available_providers()}")
     

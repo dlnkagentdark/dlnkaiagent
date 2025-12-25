@@ -1,7 +1,7 @@
 """
 dLNk AI Bridge - Jetski API Client
 ==================================
-Alternative client for Jetski API (Antigravity variant).
+Alternative client for Jetski API (dLNk AI variant).
 
 Author: dLNk Team (AI-05)
 Version: 1.0.0

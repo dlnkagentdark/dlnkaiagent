@@ -1,4 +1,0 @@
-[*] Starting HTTPS MITM Proxy on port 8081...
-
-[MITM] CONNECT request to open-vsx.org:443
-[-] SSL Wrap failed: [SSL: SSLV3_ALERT_BAD_CERTIFICATE] sslv3 alert bad certificate (_ssl.c:1006)

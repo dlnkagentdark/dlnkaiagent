@@ -142,9 +142,9 @@ class App(ctk.CTk):
 
         # 2. Launch VS Code
         vscode_paths = [
-            os.path.expandvars(r"%LOCALAPPDATA%\Programs\Microsoft VS Code\Code.exe"),
-            r"C:\Program Files\Microsoft VS Code\Code.exe",
-             r"C:\Program Files (x86)\Microsoft VS Code\Code.exe"
+            os.path.expandvars(r"%LOCALAPPDATA%\Programs\dLNk IDE\Code.exe"),
+            r"C:\Program Files\dLNk IDE\Code.exe",
+             r"C:\Program Files (x86)\dLNk IDE\Code.exe"
         ]
         
         vscode_exe = None
