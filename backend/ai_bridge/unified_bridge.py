@@ -5,7 +5,7 @@ dLNk Unified AI Bridge
 ระบบเชื่อมต่อ AI หลายตัวแบบรวมศูนย์
 
 Features:
-- รองรับหลาย AI Providers (Jetski, Groq, Together, Anthropic, Mistral) - NO PAID APIs
+- รองรับหลาย AI Providers (Jetski, Groq, Ollama, Together, Anthropic, Mistral)
 - Auto-Failover อัตโนมัติ
 - Token Rotation สำหรับ Jetski/Google AI
 - Prompt Templates สำหรับ 10 AI Modes
@@ -227,9 +227,15 @@ class UnifiedAIBridge:
                     "base_url": "http://localhost:8080",
                     "use_token_rotation": True
                 },
-                "groq": {
+                "_openai_removed": {
                     "enabled": True,
                     "priority": 2,
+                    "_removed": "OpenAI removed",
+                    "model": "gpt-4-turbo-preview"
+                },
+                "groq": {
+                    "enabled": True,
+                    "priority": 3,
                     "api_key_env": "GROQ_API_KEY",
                     "model": "mixtral-8x7b-32768"
                 },
@@ -311,7 +317,8 @@ class UnifiedAIBridge:
                 token_integration=self.token_integration if config.get("use_token_rotation") else None
             )
         
-        # NOTE: OpenAI has been REMOVED to eliminate paid API costs
+        # NOTE: OpenAI provider has been REMOVED to eliminate paid API costs
+        # All providers are now FREE
         
         elif name == "groq":
             api_key = os.environ.get(config.get("api_key_env", "GROQ_API_KEY"))
@@ -473,7 +480,7 @@ class UnifiedAIBridge:
             return client.complete(messages, model, temperature, max_tokens)
         
         elif hasattr(client, 'chat') and hasattr(client.chat, 'completions'):
-            # Groq/OpenAI-compatible client (using FREE providers only)
+            # Groq-compatible client (FREE)
             response = client.chat.completions.create(
                 model=model or "gpt-4-turbo-preview",
                 messages=messages,

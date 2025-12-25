@@ -265,7 +265,7 @@ def create_provider_health_check(provider_type: str):
     สร้าง health check function สำหรับ provider แต่ละประเภท
     
     Args:
-        provider_type: ประเภทของ provider (jetski, groq, ollama, etc.) - NO PAID APIs
+        provider_type: ประเภทของ provider (jetski, groq, ollama, etc.)
         
     Returns:
         Health check function
@@ -279,7 +279,14 @@ def create_provider_health_check(provider_type: str):
         except:
             return False
     
-    # NOTE: OpenAI health check removed - No paid APIs
+    def _removed_openai_health_check(client) -> bool:
+        """REMOVED - No paid APIs"""
+        try:
+            # ลองเรียก models endpoint
+            models = client.models.list()
+            return len(list(models)) > 0
+        except:
+            return False
     
     def groq_health_check(client) -> bool:
         """Health check สำหรับ Groq"""
@@ -303,8 +310,8 @@ def create_provider_health_check(provider_type: str):
     
     health_checks = {
         "jetski": jetski_health_check,
-        "groq": groq_health_check,
         "ollama": generic_health_check,
+        "groq": groq_health_check,
         "together": generic_health_check,
         "anthropic": generic_health_check,
         "mistral": generic_health_check

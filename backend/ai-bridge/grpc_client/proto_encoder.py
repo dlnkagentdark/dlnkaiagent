@@ -1,9 +1,9 @@
 """
 dLNk AI Bridge - Protobuf Encoder
 =================================
-Lightweight encoder for Antigravity/Jetski Protobuf messages.
+Lightweight encoder for dLNk AI/Jetski Protobuf messages.
 
-Based on: /source-files/dlnk_core/dlnk_antigravity_bridge.py
+Based on: /source-files/dlnk_core/dlnk_dlnk_ai_bridge.py
 
 Author: dLNk Team (AI-05)
 Version: 1.0.0
@@ -16,7 +16,7 @@ from typing import Optional
 
 class ProtoEncoder:
     """
-    Lightweight encoder for Antigravity Protobuf messages
+    Lightweight encoder for dLNk AI Protobuf messages
     
     This encoder creates binary protobuf payloads without requiring
     the full protobuf library, making it lightweight and portable.
@@ -203,7 +203,7 @@ class ProtoEncoder:
         """
         Build SendUserCascadeMessageRequest binary payload
         
-        This is the main request format for Antigravity gRPC API.
+        This is the main request format for dLNk AI gRPC API.
         
         Field Mapping (based on reverse engineering):
         1: cascade_id (string)
@@ -297,7 +297,7 @@ class ProtoEncoder:
 
 class ProtoDecoder:
     """
-    Lightweight decoder for Antigravity Protobuf responses
+    Lightweight decoder for dLNk AI Protobuf responses
     """
     
     @staticmethod
