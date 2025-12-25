@@ -1,0 +1,23 @@
+{
+  "test_user": {
+    "user_id": "test_user",
+    "secret": "WHXKJZMS4G5EZRS76NHWKBXPPI42PBIBW4ZZUQD2Z76IJUAEJP7A",
+    "enabled": true,
+    "created_at": "2025-12-25T02:40:23.466331",
+    "verified_at": "2025-12-25T02:40:23.466968",
+    "backup_codes": [
+      "AB61-95C7",
+      "1B7D-C463",
+      "5BE8-FBA4",
+      "DF4B-5359",
+      "90DE-9D0E",
+      "CB9E-16E0",
+      "4D41-0D1C",
+      "9349-26A0",
+      "A557-B3A0",
+      "28F4-CF31"
+    ],
+    "used_backup_codes": [],
+    "last_used": "2025-12-25T02:40:23.467412"
+  }
+}

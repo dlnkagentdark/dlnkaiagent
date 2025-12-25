@@ -1,0 +1,62 @@
+{
+  "DLNK-P3B7-F201-A34C-17EE": {
+    "key": "DLNK-P3B7-F201-A34C-17EE",
+    "license_type": "pro",
+    "status": "pending",
+    "created_at": "2025-12-25T02:38:00.964964",
+    "activated_at": null,
+    "expires_at": "2026-03-25T02:38:00.964925",
+    "hwid": null,
+    "user_email": "test@example.com",
+    "max_activations": 1,
+    "current_activations": 0,
+    "features": [
+      "ai_chat",
+      "code_completion",
+      "all_ai_modes",
+      "priority_support",
+      "custom_prompts"
+    ],
+    "metadata": {}
+  },
+  "DLNK-P2B9-D2F8-D6F2-A609": {
+    "key": "DLNK-P2B9-D2F8-D6F2-A609",
+    "license_type": "pro",
+    "status": "active",
+    "created_at": "2025-12-25T02:38:17.006580",
+    "activated_at": "2025-12-25T02:38:17.007330",
+    "expires_at": "2026-03-25T02:38:17.006550",
+    "hwid": "95CA915EA54A0A176AA17F4E052772FC",
+    "user_email": "test@example.com",
+    "max_activations": 1,
+    "current_activations": 1,
+    "features": [
+      "ai_chat",
+      "code_completion",
+      "all_ai_modes",
+      "priority_support",
+      "custom_prompts"
+    ],
+    "metadata": {}
+  },
+  "DLNK-P902-A94E-16DC-6EDF": {
+    "key": "DLNK-P902-A94E-16DC-6EDF",
+    "license_type": "pro",
+    "status": "pending",
+    "created_at": "2025-12-25T02:41:41.687099",
+    "activated_at": null,
+    "expires_at": "2026-03-25T02:41:41.687082",
+    "hwid": null,
+    "user_email": "test@example.com",
+    "max_activations": 1,
+    "current_activations": 0,
+    "features": [
+      "ai_chat",
+      "code_completion",
+      "all_ai_modes",
+      "priority_support",
+      "custom_prompts"
+    ],
+    "metadata": {}
+  }
+}
