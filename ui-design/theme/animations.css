@@ -1,0 +1,429 @@
+/**
+ * dLNk IDE - Animation Library
+ * AI-04 UI/UX Designer
+ * Version: 1.0.0
+ * 
+ * Collection of CSS animations for the dLNk IDE
+ * All animations follow the Style Guide timing specifications
+ */
+
+/* =============================================================================
+   ANIMATION TIMING VARIABLES
+   ============================================================================= */
+
+:root {
+    /* Duration */
+    --dlnk-duration-fast: 150ms;
+    --dlnk-duration-normal: 250ms;
+    --dlnk-duration-slow: 400ms;
+    
+    /* Easing */
+    --dlnk-ease-default: ease;
+    --dlnk-ease-in: ease-in;
+    --dlnk-ease-out: ease-out;
+    --dlnk-ease-in-out: ease-in-out;
+    --dlnk-ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    --dlnk-ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* =============================================================================
+   FADE ANIMATIONS
+   ============================================================================= */
+
+/* Fade In */
+@keyframes dlnk-fade-in {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.dlnk-fade-in {
+    animation: dlnk-fade-in var(--dlnk-duration-normal) var(--dlnk-ease-default);
+}
+
+/* Fade Out */
+@keyframes dlnk-fade-out {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+.dlnk-fade-out {
+    animation: dlnk-fade-out var(--dlnk-duration-normal) var(--dlnk-ease-default);
+}
+
+/* Fade In Up */
+@keyframes dlnk-fade-in-up {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.dlnk-fade-in-up {
+    animation: dlnk-fade-in-up var(--dlnk-duration-normal) var(--dlnk-ease-out);
+}
+
+/* Fade In Down */
+@keyframes dlnk-fade-in-down {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.dlnk-fade-in-down {
+    animation: dlnk-fade-in-down var(--dlnk-duration-normal) var(--dlnk-ease-out);
+}
+
+/* Fade In Left */
+@keyframes dlnk-fade-in-left {
+    from {
+        opacity: 0;
+        transform: translateX(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.dlnk-fade-in-left {
+    animation: dlnk-fade-in-left var(--dlnk-duration-normal) var(--dlnk-ease-out);
+}
+
+/* Fade In Right */
+@keyframes dlnk-fade-in-right {
+    from {
+        opacity: 0;
+        transform: translateX(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.dlnk-fade-in-right {
+    animation: dlnk-fade-in-right var(--dlnk-duration-normal) var(--dlnk-ease-out);
+}
+
+/* =============================================================================
+   SCALE ANIMATIONS
+   ============================================================================= */
+
+/* Scale In */
+@keyframes dlnk-scale-in {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.dlnk-scale-in {
+    animation: dlnk-scale-in var(--dlnk-duration-normal) var(--dlnk-ease-out);
+}
+
+/* Scale Out */
+@keyframes dlnk-scale-out {
+    from {
+        opacity: 1;
+        transform: scale(1);
+    }
+    to {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+}
+
+.dlnk-scale-out {
+    animation: dlnk-scale-out var(--dlnk-duration-normal) var(--dlnk-ease-in);
+}
+
+/* Pop In (with bounce) */
+@keyframes dlnk-pop-in {
+    0% {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    70% {
+        transform: scale(1.05);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.dlnk-pop-in {
+    animation: dlnk-pop-in var(--dlnk-duration-slow) var(--dlnk-ease-bounce);
+}
+
+/* =============================================================================
+   LOADING ANIMATIONS
+   ============================================================================= */
+
+/* Spinner */
+@keyframes dlnk-spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.dlnk-spinner {
+    animation: dlnk-spin 1s linear infinite;
+}
+
+/* Pulse */
+@keyframes dlnk-pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+.dlnk-pulse {
+    animation: dlnk-pulse 1.5s var(--dlnk-ease-in-out) infinite;
+}
+
+/* Bounce Dots */
+@keyframes dlnk-bounce {
+    0%, 80%, 100% {
+        transform: scale(0);
+    }
+    40% {
+        transform: scale(1);
+    }
+}
+
+.dlnk-loading-dots {
+    display: inline-flex;
+    gap: 4px;
+}
+
+.dlnk-loading-dots span {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: var(--dlnk-accent-primary, #e94560);
+    animation: dlnk-bounce 1.4s var(--dlnk-ease-in-out) infinite both;
+}
+
+.dlnk-loading-dots span:nth-child(1) {
+    animation-delay: -0.32s;
+}
+
+.dlnk-loading-dots span:nth-child(2) {
+    animation-delay: -0.16s;
+}
+
+.dlnk-loading-dots span:nth-child(3) {
+    animation-delay: 0s;
+}
+
+/* Progress Bar */
+@keyframes dlnk-progress-indeterminate {
+    0% {
+        transform: translateX(-100%);
+    }
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+.dlnk-progress-indeterminate {
+    position: relative;
+    overflow: hidden;
+}
+
+.dlnk-progress-indeterminate::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, var(--dlnk-accent-primary, #e94560), transparent);
+    animation: dlnk-progress-indeterminate 1.5s linear infinite;
+}
+
+/* Skeleton Loading */
+@keyframes dlnk-skeleton {
+    0% {
+        background-position: -200% 0;
+    }
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+.dlnk-skeleton {
+    background: linear-gradient(
+        90deg,
+        var(--dlnk-bg-secondary, #16213e) 25%,
+        var(--dlnk-bg-tertiary, #0f3460) 50%,
+        var(--dlnk-bg-secondary, #16213e) 75%
+    );
+    background-size: 200% 100%;
+    animation: dlnk-skeleton 1.5s linear infinite;
+    border-radius: 4px;
+}
+
+/* =============================================================================
+   ATTENTION ANIMATIONS
+   ============================================================================= */
+
+/* Shake */
+@keyframes dlnk-shake {
+    0%, 100% {
+        transform: translateX(0);
+    }
+    10%, 30%, 50%, 70%, 90% {
+        transform: translateX(-4px);
+    }
+    20%, 40%, 60%, 80% {
+        transform: translateX(4px);
+    }
+}
+
+.dlnk-shake {
+    animation: dlnk-shake 0.5s var(--dlnk-ease-default);
+}
+
+/* Wiggle */
+@keyframes dlnk-wiggle {
+    0%, 100% {
+        transform: rotate(0deg);
+    }
+    25% {
+        transform: rotate(-3deg);
+    }
+    75% {
+        transform: rotate(3deg);
+    }
+}
+
+.dlnk-wiggle {
+    animation: dlnk-wiggle 0.3s var(--dlnk-ease-default);
+}
+
+/* Glow */
+@keyframes dlnk-glow {
+    0%, 100% {
+        box-shadow: 0 0 5px var(--dlnk-accent-primary, #e94560);
+    }
+    50% {
+        box-shadow: 0 0 20px var(--dlnk-accent-primary, #e94560);
+    }
+}
+
+.dlnk-glow {
+    animation: dlnk-glow 2s var(--dlnk-ease-in-out) infinite;
+}
+
+/* =============================================================================
+   TRANSITION UTILITIES
+   ============================================================================= */
+
+.dlnk-transition-fast {
+    transition: all var(--dlnk-duration-fast) var(--dlnk-ease-default);
+}
+
+.dlnk-transition-normal {
+    transition: all var(--dlnk-duration-normal) var(--dlnk-ease-default);
+}
+
+.dlnk-transition-slow {
+    transition: all var(--dlnk-duration-slow) var(--dlnk-ease-default);
+}
+
+.dlnk-transition-colors {
+    transition: color var(--dlnk-duration-fast) var(--dlnk-ease-default),
+                background-color var(--dlnk-duration-fast) var(--dlnk-ease-default),
+                border-color var(--dlnk-duration-fast) var(--dlnk-ease-default);
+}
+
+.dlnk-transition-transform {
+    transition: transform var(--dlnk-duration-normal) var(--dlnk-ease-default);
+}
+
+.dlnk-transition-opacity {
+    transition: opacity var(--dlnk-duration-normal) var(--dlnk-ease-default);
+}
+
+/* =============================================================================
+   HOVER EFFECTS
+   ============================================================================= */
+
+.dlnk-hover-lift {
+    transition: transform var(--dlnk-duration-fast) var(--dlnk-ease-default);
+}
+
+.dlnk-hover-lift:hover {
+    transform: translateY(-2px);
+}
+
+.dlnk-hover-scale {
+    transition: transform var(--dlnk-duration-fast) var(--dlnk-ease-default);
+}
+
+.dlnk-hover-scale:hover {
+    transform: scale(1.02);
+}
+
+.dlnk-hover-glow {
+    transition: box-shadow var(--dlnk-duration-fast) var(--dlnk-ease-default);
+}
+
+.dlnk-hover-glow:hover {
+    box-shadow: 0 0 15px rgba(233, 69, 96, 0.3);
+}
+
+/* =============================================================================
+   ANIMATION DELAY UTILITIES
+   ============================================================================= */
+
+.dlnk-delay-100 { animation-delay: 100ms; }
+.dlnk-delay-200 { animation-delay: 200ms; }
+.dlnk-delay-300 { animation-delay: 300ms; }
+.dlnk-delay-400 { animation-delay: 400ms; }
+.dlnk-delay-500 { animation-delay: 500ms; }
+.dlnk-delay-700 { animation-delay: 700ms; }
+.dlnk-delay-1000 { animation-delay: 1000ms; }
+
+/* =============================================================================
+   REDUCED MOTION
+   ============================================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
