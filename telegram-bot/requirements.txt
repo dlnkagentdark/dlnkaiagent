@@ -1,34 +1,111 @@
 # dLNk Telegram Bot Dependencies
 # Python 3.9+ required
+# Last updated: 2025-12-25
+
+# ==========================================
+# Core Dependencies
+# ==========================================
 
 # Telegram Bot Framework (aiogram 3.x)
+# Modern async framework for Telegram Bot API
 aiogram>=3.3.0
 
-# HTTP Client
+# HTTP Clients
+# aiohttp: async HTTP client for webhooks
+# httpx: modern HTTP client for API calls
 aiohttp>=3.9.0
 httpx>=0.26.0
 
 # Environment Variables
+# Load configuration from .env files
 python-dotenv>=1.0.0
 
-# Async Scheduler
+# ==========================================
+# Scheduling & Background Tasks
+# ==========================================
+
+# Async Scheduler for periodic tasks
+# Used for alerts, notifications, and cleanup
 apscheduler>=3.10.0
 
-# Database (optional, for local caching)
-aiosqlite>=0.19.0
+# ==========================================
+# Data Validation & Serialization
+# ==========================================
 
-# Validation
+# Pydantic for data validation
+# Used for API request/response models
 pydantic>=2.5.0
 
-# Logging
+# ==========================================
+# Database
+# ==========================================
+
+# SQLite async driver for local caching
+# Stores user preferences and rate limit data
+aiosqlite>=0.19.0
+
+# ==========================================
+# Logging & Monitoring
+# ==========================================
+
+# Structured logging for better observability
 structlog>=24.1.0
 
+# ==========================================
 # Rate Limiting
+# ==========================================
+
+# Async rate limiter for API protection
 aiolimiter>=1.1.0
 
-# Cryptography (for license verification)
+# ==========================================
+# Security & Cryptography
+# ==========================================
+
+# Cryptography for license verification
+# Used for encrypting/decrypting license keys
 cryptography>=41.0.0
 
-# Development
+# ==========================================
+# Utilities
+# ==========================================
+
+# Timezone handling
+pytz>=2024.1
+
+# Date/time utilities
+python-dateutil>=2.8.2
+
+# ==========================================
+# Development & Testing
+# ==========================================
+
+# Testing framework
 pytest>=7.4.0
 pytest-asyncio>=0.23.0
+pytest-cov>=4.1.0
+
+# Code formatting
+black>=24.1.0
+isort>=5.13.0
+
+# Linting
+flake8>=7.0.0
+mypy>=1.8.0
+
+# ==========================================
+# Optional Dependencies
+# ==========================================
+
+# Redis for distributed caching (optional)
+# Uncomment if using Redis for session storage
+# redis>=5.0.0
+# aioredis>=2.0.0
+
+# Sentry for error tracking (optional)
+# Uncomment if using Sentry for monitoring
+# sentry-sdk>=1.39.0
+
+# Prometheus metrics (optional)
+# Uncomment if exposing metrics
+# prometheus-client>=0.19.0

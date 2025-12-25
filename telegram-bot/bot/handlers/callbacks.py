@@ -2,6 +2,17 @@
 dLNk Telegram Bot - Callback Handlers
 
 This module handles all callback queries from inline keyboards.
+Callbacks are triggered when users interact with inline buttons.
+
+Callback Types:
+    - confirm_*: Confirmation actions (ban, unban, revoke, extend, approve, reject)
+    - cancel: Cancel current action
+    - menu_*: Menu navigation
+    - create_*: Quick license creation
+    - alert_*: Alert settings management
+    - page_*: Pagination
+    - refresh: Refresh current view
+    - close: Close/dismiss message
 """
 
 import logging
@@ -25,11 +36,14 @@ logger = logging.getLogger(__name__)
 
 def register_handlers(router: Router, bot: "DLNkBot"):
     """
-    Register all callback handlers.
+    Register all callback handlers with the router.
+    
+    This function sets up handlers for all inline keyboard callbacks.
+    Each handler processes user interactions with inline buttons.
     
     Args:
-        router: aiogram Router instance
-        bot: DLNkBot instance
+        router: aiogram Router instance for registering handlers
+        bot: DLNkBot instance providing access to bot functionality
     """
     
     # ==========================================
@@ -38,7 +52,18 @@ def register_handlers(router: Router, bot: "DLNkBot"):
     
     @router.callback_query(F.data.startswith("confirm_"))
     async def callback_confirm(callback: CallbackQuery):
-        """Handle confirm callbacks"""
+        """
+        Handle confirm callbacks for various actions.
+        
+        Processes confirmation for:
+        - User banning/unbanning
+        - License revocation/extension
+        - Registration approval/rejection
+        - Broadcast messages
+        
+        Args:
+            callback: CallbackQuery from inline button press
+        """
         action = callback.data.replace("confirm_", "")
         user_id = callback.from_user.id
         
@@ -97,6 +122,16 @@ def register_handlers(router: Router, bot: "DLNkBot"):
             )
             logger.info(f"Admin {user_id} extended license {license_key} by {days} days")
         
+        elif action.startswith("approve_"):
+            # Handle registration approval
+            # Format: approve_email_type_days
+            await _handle_approve_callback(callback, action, user_id, bot)
+        
+        elif action.startswith("reject_"):
+            # Handle registration rejection
+            # Format: reject_email
+            await _handle_reject_callback(callback, action, user_id, bot)
+        
         elif action == "broadcast":
             # Get the broadcast message from the original message
             original_text = callback.message.text or ""
@@ -121,7 +156,14 @@ def register_handlers(router: Router, bot: "DLNkBot"):
     
     @router.callback_query(F.data == "cancel")
     async def callback_cancel(callback: CallbackQuery):
-        """Handle cancel callbacks"""
+        """
+        Handle cancel callbacks.
+        
+        Cancels the current pending action and updates the message.
+        
+        Args:
+            callback: CallbackQuery from inline button press
+        """
         await callback.message.edit_text("❌ Action cancelled.")
         await callback.answer("Cancelled")
     
@@ -131,7 +173,14 @@ def register_handlers(router: Router, bot: "DLNkBot"):
     
     @router.callback_query(F.data.startswith("menu_"))
     async def callback_menu(callback: CallbackQuery):
-        """Handle menu navigation callbacks"""
+        """
+        Handle menu navigation callbacks.
+        
+        Updates the message to show the selected menu section.
+        
+        Args:
+            callback: CallbackQuery from inline button press
+        """
         menu = callback.data.replace("menu_", "")
         
         if menu == "status":
@@ -238,7 +287,14 @@ def register_handlers(router: Router, bot: "DLNkBot"):
     
     @router.callback_query(F.data.startswith("create_"))
     async def callback_create(callback: CallbackQuery):
-        """Handle quick create license callbacks"""
+        """
+        Handle quick create license callbacks.
+        
+        Creates a new license with preset configuration based on type.
+        
+        Args:
+            callback: CallbackQuery from inline button press
+        """
         user_id = callback.from_user.id
         
         if not bot.is_admin(user_id):
@@ -298,7 +354,14 @@ def register_handlers(router: Router, bot: "DLNkBot"):
     
     @router.callback_query(F.data.startswith("alert_"))
     async def callback_alert(callback: CallbackQuery):
-        """Handle alert settings callbacks"""
+        """
+        Handle alert settings callbacks.
+        
+        Manages alert configuration including toggles and severity levels.
+        
+        Args:
+            callback: CallbackQuery from inline button press
+        """
         user_id = callback.from_user.id
         
         if not bot.is_admin(user_id):
@@ -352,7 +415,14 @@ def register_handlers(router: Router, bot: "DLNkBot"):
     
     @router.callback_query(F.data.startswith("page_"))
     async def callback_page(callback: CallbackQuery):
-        """Handle pagination callbacks"""
+        """
+        Handle pagination callbacks.
+        
+        Navigates between pages of paginated content.
+        
+        Args:
+            callback: CallbackQuery from inline button press
+        """
         page_info = callback.data.replace("page_", "")
         # Format: page_type_number (e.g., page_users_2)
         
@@ -373,7 +443,14 @@ def register_handlers(router: Router, bot: "DLNkBot"):
     
     @router.callback_query(F.data == "refresh")
     async def callback_refresh(callback: CallbackQuery):
-        """Handle refresh callbacks"""
+        """
+        Handle refresh callbacks.
+        
+        Refreshes the current view with updated data.
+        
+        Args:
+            callback: CallbackQuery from inline button press
+        """
         await callback.answer("🔄 Refreshing...")
         # The actual refresh logic would depend on what's being refreshed
         # This is handled by the menu callbacks above
@@ -384,8 +461,183 @@ def register_handlers(router: Router, bot: "DLNkBot"):
     
     @router.callback_query(F.data == "close")
     async def callback_close(callback: CallbackQuery):
-        """Handle close/dismiss callbacks"""
+        """
+        Handle close/dismiss callbacks.
+        
+        Deletes the message containing the inline keyboard.
+        
+        Args:
+            callback: CallbackQuery from inline button press
+        """
         await callback.message.delete()
         await callback.answer()
     
     logger.info("Callback handlers registered")
+
+
+# ==========================================
+# Helper Functions for Registration Management
+# ==========================================
+
+async def _handle_approve_callback(
+    callback: CallbackQuery,
+    action: str,
+    admin_id: int,
+    bot: "DLNkBot"
+):
+    """
+    Handle registration approval callback.
+    
+    Approves a pending registration and creates a license for the user.
+    
+    Args:
+        callback: CallbackQuery from inline button press
+        action: Action string containing email, type, and days
+        admin_id: Telegram ID of the admin performing the action
+        bot: DLNkBot instance
+    """
+    # Parse action: approve_email_type_days
+    parts = action.replace("approve_", "").rsplit("_", 2)
+    
+    if len(parts) < 3:
+        await callback.message.edit_text(
+            "❌ <b>Error</b>\n\n"
+            "Invalid approval data. Please try again with /approve command."
+        )
+        return
+    
+    email = parts[0]
+    license_type = parts[1]
+    days = int(parts[2])
+    
+    try:
+        from api_client.backend import BackendAPIClient
+        api_client = BackendAPIClient()
+        
+        # Approve registration via API
+        result = await api_client.approve_registration(
+            email=email,
+            license_type=license_type,
+            duration_days=days,
+            approved_by=str(admin_id)
+        )
+        
+        await api_client.close()
+        
+        if result.get("success"):
+            license_key = result.get("license_key", "N/A")
+            
+            await callback.message.edit_text(
+                f"✅ <b>Registration Approved</b>\n\n"
+                f"<b>Email:</b> <code>{email}</code>\n"
+                f"<b>License Type:</b> {license_type.title()}\n"
+                f"<b>Duration:</b> {days} days\n"
+                f"<b>License Key:</b> <code>{license_key}</code>\n\n"
+                f"<b>Approved by:</b> Admin {admin_id}\n"
+                f"<b>Time:</b> {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n\n"
+                f"✉️ User has been notified via email."
+            )
+            
+            logger.info(f"Admin {admin_id} approved registration for {email}")
+            
+            # Send alert to other admins
+            await bot.send_alert(
+                f"✅ Registration approved: <code>{email}</code>\n"
+                f"License: {license_type} ({days} days)\n"
+                f"By: Admin {admin_id}",
+                severity=1
+            )
+        else:
+            error_msg = result.get("message", "Unknown error")
+            await callback.message.edit_text(
+                f"❌ <b>Approval Failed</b>\n\n"
+                f"<b>Email:</b> <code>{email}</code>\n"
+                f"<b>Error:</b> {error_msg}\n\n"
+                f"Please try again or check the backend logs."
+            )
+            logger.error(f"Failed to approve registration for {email}: {error_msg}")
+            
+    except Exception as e:
+        logger.error(f"Error approving registration: {e}")
+        await callback.message.edit_text(
+            f"❌ <b>Error</b>\n\n"
+            f"Failed to approve registration.\n"
+            f"<code>{str(e)}</code>"
+        )
+
+
+async def _handle_reject_callback(
+    callback: CallbackQuery,
+    action: str,
+    admin_id: int,
+    bot: "DLNkBot"
+):
+    """
+    Handle registration rejection callback.
+    
+    Rejects a pending registration request.
+    
+    Args:
+        callback: CallbackQuery from inline button press
+        action: Action string containing email
+        admin_id: Telegram ID of the admin performing the action
+        bot: DLNkBot instance
+    """
+    # Parse action: reject_email
+    email = action.replace("reject_", "")
+    
+    # Get reason from original message if available
+    original_text = callback.message.text or ""
+    reason = "No reason provided"
+    if "Reason:" in original_text:
+        reason = original_text.split("Reason:")[1].split("\n")[0].strip()
+    
+    try:
+        from api_client.backend import BackendAPIClient
+        api_client = BackendAPIClient()
+        
+        # Reject registration via API
+        result = await api_client.reject_registration(
+            email=email,
+            reason=reason,
+            rejected_by=str(admin_id)
+        )
+        
+        await api_client.close()
+        
+        if result.get("success"):
+            await callback.message.edit_text(
+                f"❌ <b>Registration Rejected</b>\n\n"
+                f"<b>Email:</b> <code>{email}</code>\n"
+                f"<b>Reason:</b> {reason}\n\n"
+                f"<b>Rejected by:</b> Admin {admin_id}\n"
+                f"<b>Time:</b> {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n\n"
+                f"✉️ User has been notified via email."
+            )
+            
+            logger.info(f"Admin {admin_id} rejected registration for {email}")
+            
+            # Send alert to other admins
+            await bot.send_alert(
+                f"❌ Registration rejected: <code>{email}</code>\n"
+                f"Reason: {reason}\n"
+                f"By: Admin {admin_id}",
+                severity=1
+            )
+        else:
+            error_msg = result.get("message", "Unknown error")
+            await callback.message.edit_text(
+                f"❌ <b>Rejection Failed</b>\n\n"
+                f"<b>Email:</b> <code>{email}</code>\n"
+                f"<b>Error:</b> {error_msg}\n\n"
+                f"Please try again or check the backend logs."
+            )
+            logger.error(f"Failed to reject registration for {email}: {error_msg}")
+            
+    except Exception as e:
+        logger.error(f"Error rejecting registration: {e}")
+        await callback.message.edit_text(
+            f"❌ <b>Error</b>\n\n"
+            f"Failed to reject registration.\n"
+            f"<code>{str(e)}</code>"
+        )
