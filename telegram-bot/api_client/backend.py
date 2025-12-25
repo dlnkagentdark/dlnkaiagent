@@ -2,6 +2,7 @@
 dLNk Telegram Bot - Backend API Client
 
 This module provides a client for communicating with the dLNk backend API.
+It handles all HTTP communication with proper error handling and retry logic.
 """
 
 import logging
@@ -22,9 +23,15 @@ class BackendAPIClient:
     Provides methods for:
     - User management
     - License management
+    - Registration approval/rejection
     - System status
     - Logs retrieval
     - Statistics
+    
+    Attributes:
+        base_url: The base URL of the backend API
+        api_key: API key for authentication
+        timeout: Request timeout in seconds
     """
     
     def __init__(
@@ -37,9 +44,9 @@ class BackendAPIClient:
         Initialize the API client.
         
         Args:
-            base_url: Backend API base URL
-            api_key: API key for authentication
-            timeout: Request timeout in seconds
+            base_url: Backend API base URL. Defaults to APIConfig.BACKEND_URL
+            api_key: API key for authentication. Defaults to APIConfig.API_KEY
+            timeout: Request timeout in seconds. Defaults to APIConfig.API_TIMEOUT
         """
         self.base_url = (base_url or APIConfig.BACKEND_URL).rstrip('/')
         self.api_key = api_key or APIConfig.API_KEY
@@ -48,7 +55,12 @@ class BackendAPIClient:
         self._client: Optional[httpx.AsyncClient] = None
     
     async def _get_client(self) -> httpx.AsyncClient:
-        """Get or create HTTP client."""
+        """
+        Get or create HTTP client.
+        
+        Returns:
+            httpx.AsyncClient: The HTTP client instance
+        """
         if self._client is None or self._client.is_closed:
             self._client = httpx.AsyncClient(
                 base_url=self.base_url,
@@ -62,7 +74,11 @@ class BackendAPIClient:
         return self._client
     
     async def close(self):
-        """Close the HTTP client."""
+        """
+        Close the HTTP client and release resources.
+        
+        Should be called when the client is no longer needed.
+        """
         if self._client and not self._client.is_closed:
             await self._client.aclose()
             self._client = None
@@ -74,15 +90,18 @@ class BackendAPIClient:
         **kwargs
     ) -> Dict[str, Any]:
         """
-        Make an API request.
+        Make an API request with error handling.
         
         Args:
-            method: HTTP method
-            endpoint: API endpoint
-            **kwargs: Additional request arguments
+            method: HTTP method (GET, POST, PUT, DELETE)
+            endpoint: API endpoint path
+            **kwargs: Additional request arguments (json, params, etc.)
             
         Returns:
-            Response data as dict
+            Dict[str, Any]: Response data as dictionary
+            
+        Raises:
+            APIError: If the request fails
         """
         client = await self._get_client()
         
@@ -106,7 +125,7 @@ class BackendAPIClient:
         Get system status.
         
         Returns:
-            System status dict
+            Dict[str, Any]: System status containing service health and metrics
         """
         try:
             return await self._request("GET", "/api/status")
@@ -127,7 +146,7 @@ class BackendAPIClient:
         Get system health metrics.
         
         Returns:
-            Health metrics dict
+            Dict[str, Any]: Health metrics including CPU, memory, and service status
         """
         try:
             return await self._request("GET", "/api/health")
@@ -148,15 +167,15 @@ class BackendAPIClient:
         search: str = None
     ) -> Dict[str, Any]:
         """
-        Get list of users.
+        Get list of users with pagination.
         
         Args:
-            page: Page number
-            limit: Items per page
-            search: Search query
+            page: Page number (1-indexed)
+            limit: Items per page (max 100)
+            search: Optional search query for filtering
             
         Returns:
-            Users list with pagination
+            Dict[str, Any]: Users list with pagination metadata
         """
         params = {"page": page, "limit": limit}
         if search:
@@ -169,16 +188,36 @@ class BackendAPIClient:
     
     async def get_user(self, user_id: str) -> Optional[Dict[str, Any]]:
         """
-        Get user details.
+        Get user details by ID.
         
         Args:
-            user_id: User ID
+            user_id: The user's unique identifier
             
         Returns:
-            User details or None
+            Optional[Dict[str, Any]]: User details or None if not found
         """
         try:
             return await self._request("GET", f"/api/users/{user_id}")
+        except APIError:
+            return None
+    
+    async def get_user_by_email(self, email: str) -> Optional[Dict[str, Any]]:
+        """
+        Get user details by email address.
+        
+        Args:
+            email: The user's email address
+            
+        Returns:
+            Optional[Dict[str, Any]]: User details or None if not found
+        """
+        try:
+            result = await self._request("GET", "/api/users", params={"search": email})
+            users = result.get("users", [])
+            for user in users:
+                if user.get("email", "").lower() == email.lower():
+                    return user
+            return None
         except APIError:
             return None
     
@@ -187,7 +226,7 @@ class BackendAPIClient:
         Get user statistics.
         
         Returns:
-            User statistics dict
+            Dict[str, Any]: Statistics including total, active, and new users
         """
         try:
             return await self._request("GET", "/api/users/stats")
@@ -201,14 +240,14 @@ class BackendAPIClient:
     
     async def ban_user(self, user_id: str, reason: str = None) -> bool:
         """
-        Ban a user.
+        Ban a user from the system.
         
         Args:
             user_id: User ID to ban
-            reason: Ban reason
+            reason: Optional reason for the ban
             
         Returns:
-            True if successful
+            bool: True if successful, False otherwise
         """
         try:
             await self._request(
@@ -222,19 +261,183 @@ class BackendAPIClient:
     
     async def unban_user(self, user_id: str) -> bool:
         """
-        Unban a user.
+        Unban a previously banned user.
         
         Args:
             user_id: User ID to unban
             
         Returns:
-            True if successful
+            bool: True if successful, False otherwise
         """
         try:
             await self._request("POST", f"/api/users/{user_id}/unban")
             return True
         except APIError:
             return False
+    
+    # ==========================================
+    # Registration Management (Admin)
+    # ==========================================
+    
+    async def get_pending_registrations(self) -> List[Dict[str, Any]]:
+        """
+        Get list of pending registration requests.
+        
+        Returns:
+            List[Dict[str, Any]]: List of pending registration requests
+        """
+        try:
+            result = await self._request(
+                "GET",
+                "/api/auth/registrations/pending"
+            )
+            return result.get("registrations", [])
+        except APIError:
+            # Fallback: try to get from users with pending status
+            try:
+                result = await self._request(
+                    "GET",
+                    "/api/users",
+                    params={"status": "pending"}
+                )
+                return result.get("users", [])
+            except APIError:
+                return []
+    
+    async def approve_registration(
+        self,
+        email: str,
+        license_type: str = "trial",
+        duration_days: int = 30,
+        approved_by: str = None
+    ) -> Dict[str, Any]:
+        """
+        Approve a pending registration request.
+        
+        This will create a user account and generate a license key.
+        
+        Args:
+            email: Email of the user to approve
+            license_type: Type of license to grant (trial, pro, enterprise)
+            duration_days: License duration in days
+            approved_by: Admin who approved the request
+            
+        Returns:
+            Dict[str, Any]: Result containing success status and license info
+        """
+        try:
+            # First, try the dedicated approval endpoint
+            result = await self._request(
+                "POST",
+                "/api/auth/registrations/approve",
+                json={
+                    "email": email,
+                    "license_type": license_type,
+                    "duration_days": duration_days,
+                    "approved_by": approved_by
+                }
+            )
+            return result
+        except APIError:
+            # Fallback: Generate license directly
+            try:
+                # Get user info first
+                user = await self.get_user_by_email(email)
+                if not user:
+                    return {
+                        "success": False,
+                        "message": f"User with email {email} not found"
+                    }
+                
+                # Generate license for the user
+                license_result = await self.create_license(
+                    license_type=license_type,
+                    owner=user.get("username", email),
+                    duration_days=duration_days,
+                    email=email
+                )
+                
+                if license_result:
+                    # Update user status to approved
+                    await self._request(
+                        "POST",
+                        f"/api/users/{user.get('user_id')}/approve",
+                        json={"approved_by": approved_by}
+                    )
+                    
+                    return {
+                        "success": True,
+                        "message": "Registration approved",
+                        "license_key": license_result.get("license_key"),
+                        "user": user
+                    }
+                else:
+                    return {
+                        "success": False,
+                        "message": "Failed to create license"
+                    }
+            except APIError as e:
+                return {
+                    "success": False,
+                    "message": str(e)
+                }
+    
+    async def reject_registration(
+        self,
+        email: str,
+        reason: str = None,
+        rejected_by: str = None
+    ) -> Dict[str, Any]:
+        """
+        Reject a pending registration request.
+        
+        Args:
+            email: Email of the user to reject
+            reason: Reason for rejection
+            rejected_by: Admin who rejected the request
+            
+        Returns:
+            Dict[str, Any]: Result containing success status
+        """
+        try:
+            result = await self._request(
+                "POST",
+                "/api/auth/registrations/reject",
+                json={
+                    "email": email,
+                    "reason": reason,
+                    "rejected_by": rejected_by
+                }
+            )
+            return result
+        except APIError:
+            # Fallback: Update user status directly
+            try:
+                user = await self.get_user_by_email(email)
+                if not user:
+                    return {
+                        "success": False,
+                        "message": f"User with email {email} not found"
+                    }
+                
+                await self._request(
+                    "POST",
+                    f"/api/users/{user.get('user_id')}/reject",
+                    json={
+                        "reason": reason,
+                        "rejected_by": rejected_by
+                    }
+                )
+                
+                return {
+                    "success": True,
+                    "message": "Registration rejected"
+                }
+            except APIError as e:
+                return {
+                    "success": False,
+                    "message": str(e)
+                }
     
     # ==========================================
     # License Management
@@ -248,16 +451,16 @@ class BackendAPIClient:
         search: str = None
     ) -> Dict[str, Any]:
         """
-        Get list of licenses.
+        Get list of licenses with pagination and filtering.
         
         Args:
-            page: Page number
+            page: Page number (1-indexed)
             limit: Items per page
-            status: Filter by status
-            search: Search query
+            status: Filter by status (active, expired, revoked)
+            search: Search query for license key or owner
             
         Returns:
-            Licenses list with pagination
+            Dict[str, Any]: Licenses list with pagination metadata
         """
         params = {"page": page, "limit": limit}
         if status:
@@ -266,22 +469,23 @@ class BackendAPIClient:
             params["search"] = search
         
         try:
-            return await self._request("GET", "/api/licenses", params=params)
+            return await self._request("GET", "/api/license/list", params=params)
         except APIError:
             return {"licenses": [], "total": 0, "page": page}
     
     async def get_license(self, license_key: str) -> Optional[Dict[str, Any]]:
         """
-        Get license details.
+        Get license details by key.
         
         Args:
-            license_key: License key
+            license_key: The license key to look up
             
         Returns:
-            License details or None
+            Optional[Dict[str, Any]]: License details or None if not found
         """
         try:
-            return await self._request("GET", f"/api/licenses/{license_key}")
+            result = await self._request("GET", f"/api/license/info/{license_key}")
+            return result.get("license")
         except APIError:
             return None
     
@@ -290,10 +494,11 @@ class BackendAPIClient:
         Get license statistics.
         
         Returns:
-            License statistics dict
+            Dict[str, Any]: Statistics including total, active, expired counts
         """
         try:
-            return await self._request("GET", "/api/licenses/stats")
+            result = await self._request("GET", "/api/license/stats")
+            return result.get("stats", {})
         except APIError:
             return {
                 "total": 0,
@@ -306,27 +511,34 @@ class BackendAPIClient:
         self,
         license_type: str,
         owner: str,
-        duration_days: int = 30
+        duration_days: int = 30,
+        email: str = None,
+        features: List[str] = None
     ) -> Optional[Dict[str, Any]]:
         """
         Create a new license.
         
         Args:
-            license_type: License type (trial, basic, pro, enterprise)
-            owner: Owner name/ID
+            license_type: License type (trial, pro, enterprise)
+            owner: Owner name or username
             duration_days: License duration in days
+            email: Owner's email address
+            features: Optional list of features to enable
             
         Returns:
-            Created license details or None
+            Optional[Dict[str, Any]]: Created license details or None on failure
         """
         try:
             return await self._request(
                 "POST",
-                "/api/licenses",
+                "/api/license/generate",
                 json={
-                    "type": license_type,
-                    "owner": owner,
-                    "duration_days": duration_days
+                    "user_id": owner,
+                    "license_type": license_type,
+                    "duration_days": duration_days,
+                    "owner_name": owner,
+                    "email": email or "",
+                    "features": features
                 }
             )
         except APIError:
@@ -334,19 +546,19 @@ class BackendAPIClient:
     
     async def verify_license(self, license_key: str) -> Dict[str, Any]:
         """
-        Verify a license.
+        Verify a license key.
         
         Args:
             license_key: License key to verify
             
         Returns:
-            Verification result
+            Dict[str, Any]: Verification result with validity and features
         """
         try:
             return await self._request(
                 "POST",
-                "/api/licenses/verify",
-                json={"key": license_key}
+                "/api/license/validate",
+                json={"license_key": license_key}
             )
         except APIError:
             return {"valid": False, "message": "Verification failed"}
@@ -357,16 +569,19 @@ class BackendAPIClient:
         
         Args:
             license_key: License key to revoke
-            reason: Revocation reason
+            reason: Reason for revocation
             
         Returns:
-            True if successful
+            bool: True if successful, False otherwise
         """
         try:
             await self._request(
                 "POST",
-                f"/api/licenses/{license_key}/revoke",
-                json={"reason": reason}
+                "/api/license/revoke",
+                json={
+                    "license_key": license_key,
+                    "reason": reason or ""
+                }
             )
             return True
         except APIError:
@@ -374,20 +589,23 @@ class BackendAPIClient:
     
     async def extend_license(self, license_key: str, days: int = 30) -> bool:
         """
-        Extend a license.
+        Extend a license's expiration date.
         
         Args:
             license_key: License key to extend
             days: Number of days to extend
             
         Returns:
-            True if successful
+            bool: True if successful, False otherwise
         """
         try:
             await self._request(
                 "POST",
-                f"/api/licenses/{license_key}/extend",
-                json={"days": days}
+                "/api/license/extend",
+                json={
+                    "license_key": license_key,
+                    "days": days
+                }
             )
             return True
         except APIError:
@@ -395,18 +613,18 @@ class BackendAPIClient:
     
     async def get_expiring_licenses(self, days: int = 7) -> List[Dict[str, Any]]:
         """
-        Get licenses expiring soon.
+        Get licenses expiring within specified days.
         
         Args:
             days: Number of days to look ahead
             
         Returns:
-            List of expiring licenses
+            List[Dict[str, Any]]: List of expiring licenses
         """
         try:
             result = await self._request(
                 "GET",
-                "/api/licenses/expiring",
+                "/api/license/expiring",
                 params={"days": days}
             )
             return result.get("licenses", [])
@@ -424,15 +642,15 @@ class BackendAPIClient:
         search: str = None
     ) -> List[Dict[str, Any]]:
         """
-        Get recent logs.
+        Get recent system logs.
         
         Args:
-            limit: Maximum number of logs
-            level: Filter by log level
-            search: Search query
+            limit: Maximum number of logs to return
+            level: Filter by log level (info, warning, error)
+            search: Search query for log content
             
         Returns:
-            List of log entries
+            List[Dict[str, Any]]: List of log entries
         """
         params = {"limit": limit}
         if level:
@@ -455,11 +673,11 @@ class BackendAPIClient:
         Get recent alerts.
         
         Args:
-            limit: Maximum number of alerts
+            limit: Maximum number of alerts to return
             acknowledged: Filter by acknowledged status
             
         Returns:
-            List of alerts
+            List[Dict[str, Any]]: List of alerts
         """
         params = {"limit": limit}
         if acknowledged is not None:
@@ -477,10 +695,10 @@ class BackendAPIClient:
     
     async def get_dashboard_stats(self) -> Dict[str, Any]:
         """
-        Get dashboard statistics.
+        Get dashboard statistics for overview display.
         
         Returns:
-            Dashboard statistics dict
+            Dict[str, Any]: Comprehensive dashboard statistics
         """
         try:
             return await self._request("GET", "/api/stats/dashboard")
@@ -497,7 +715,7 @@ class BackendAPIClient:
         Get AI usage statistics.
         
         Returns:
-            AI statistics dict
+            Dict[str, Any]: AI usage metrics including requests and tokens
         """
         try:
             return await self._request("GET", "/api/stats/ai")
@@ -511,5 +729,10 @@ class BackendAPIClient:
 
 
 class APIError(Exception):
-    """Exception for API errors."""
+    """
+    Exception for API errors.
+    
+    Raised when an API request fails due to network issues,
+    authentication errors, or server-side problems.
+    """
     pass
